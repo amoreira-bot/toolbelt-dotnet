@@ -12,6 +12,8 @@ namespace Vtex.Toolbelt.Core
 
         private FileSystemWatcher fileSystemWatcher;
 
+        protected readonly List<Change> Changes = new List<Change>(); 
+
         public Watcher(string accountName, string sessionName, string rootPath)
         {
             this.accountName = accountName;
@@ -99,10 +101,17 @@ namespace Vtex.Toolbelt.Core
 
         protected virtual void UpdatePath(string path)
         {
-            throw new NotImplementedException();
+            this.Changes.Add(new Change(ChangeAction.Update, path));
+            this.Debounce();
         }
 
         protected virtual void DeletePath(string path)
+        {
+            this.Changes.Add(new Change(ChangeAction.Delete, path));
+            this.Debounce();
+        }
+
+        protected virtual void Debounce()
         {
             throw new NotImplementedException();
         }

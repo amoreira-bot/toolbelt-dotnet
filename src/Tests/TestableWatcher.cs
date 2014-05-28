@@ -9,6 +9,12 @@ namespace Vtex.Toolbelt.Tests
         private readonly Dictionary<string, string[]> folders = new Dictionary<string, string[]>();
         public List<string> UpdatedPaths { get; set; }
         public List<string> DeletedPaths { get; set; }
+        public int DebounceCount { get; set; }
+
+        public new Change[] Changes
+        {
+            get { return base.Changes.ToArray(); }
+        }
 
         public TestableWatcher()
             : base(null, null, null)
@@ -32,6 +38,16 @@ namespace Vtex.Toolbelt.Tests
             this.OnDeleted(path);
         }
 
+        public void PubliclyUpdatePath(string path)
+        {
+            base.UpdatePath(path);
+        }
+
+        public void PubliclyDeletePath(string path)
+        {
+            base.DeletePath(path);
+        }
+
         protected override void UpdatePath(string path)
         {
             this.UpdatedPaths.Add(path);
@@ -40,6 +56,11 @@ namespace Vtex.Toolbelt.Tests
         protected override void DeletePath(string path)
         {
             this.DeletedPaths.Add(path);
+        }
+
+        protected override void Debounce()
+        {
+            this.DebounceCount++;
         }
 
         protected override bool IsFolder(string path)

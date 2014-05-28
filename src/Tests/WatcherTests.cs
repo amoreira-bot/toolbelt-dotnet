@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Vtex.Toolbelt.Core;
 
 namespace Vtex.Toolbelt.Tests
 {
@@ -91,6 +92,68 @@ namespace Vtex.Toolbelt.Tests
 
                 // Assert
                 Assert.That(watcher.DeletedPaths, Is.EquivalentTo(new[] { "foofolder" }));
+            }
+        }
+
+        class UpdatePath
+        {
+            [Test]
+            public void Add_a_file_to_be_updated()
+            {
+                // Arrange
+                var watcher = new TestableWatcher();
+
+                // Act
+                watcher.PubliclyUpdatePath("foo");
+
+                // Assert
+                Assert.That(watcher.Changes, Has.Length.EqualTo(1));
+                Assert.That(watcher.Changes[0].Action, Is.EqualTo(ChangeAction.Update));
+                Assert.That(watcher.Changes[0].Path, Is.EqualTo("foo"));
+            }
+
+            [Test]
+            public void Trigger_a_submission_request()
+            {
+                // Arrange
+                var watcher = new TestableWatcher();
+
+                // Act
+                watcher.PubliclyUpdatePath("foo");
+
+                // Assert
+                Assert.That(watcher.DebounceCount, Is.EqualTo(1));
+            }
+        }
+
+        class DeletePath
+        {
+            [Test]
+            public void Add_a_path_to_be_deleted()
+            {
+                // Arrange
+                var watcher = new TestableWatcher();
+
+                // Act
+                watcher.PubliclyDeletePath("foo");
+
+                // Assert
+                Assert.That(watcher.Changes, Has.Length.EqualTo(1));
+                Assert.That(watcher.Changes[0].Action, Is.EqualTo(ChangeAction.Delete));
+                Assert.That(watcher.Changes[0].Path, Is.EqualTo("foo"));
+            }
+
+            [Test]
+            public void Trigger_a_submission_request()
+            {
+                // Arrange
+                var watcher = new TestableWatcher();
+
+                // Act
+                watcher.PubliclyDeletePath("foo");
+
+                // Assert
+                Assert.That(watcher.DebounceCount, Is.EqualTo(1));
             }
         }
     }
