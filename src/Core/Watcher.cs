@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Vtex.Toolbelt.Core
@@ -52,31 +53,68 @@ namespace Vtex.Toolbelt.Core
 
         protected void OnCreated(string path)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("CREATE ");
-            Console.ResetColor();
-            Console.WriteLine(path.Substring(rootPath.Length));
+            if (this.IsFolder(path))
+            {
+                var filePaths = this.ListFilesInFolder(path);
+                foreach (var file in filePaths)
+                {
+                    this.UpdatePath(file);
+                    this.NotifyChange("create", ConsoleColor.Green, file);
+                }
+            }
+            else
+            {
+                this.UpdatePath(path);
+                this.NotifyChange("create", ConsoleColor.Green, path);
+            }
         }
 
         protected void OnChanged(string path)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("UPDATE ");
-            Console.ResetColor();
-            Console.WriteLine(path.Substring(rootPath.Length));
+            if (this.IsFolder(path))
+                return;
+
+           this.UpdatePath(path);
+           this.NotifyChange("update", ConsoleColor.Cyan, path);
         }
 
         protected void OnDeleted(string path)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("DELETE ");
-            Console.ResetColor();
-            Console.WriteLine(path.Substring(rootPath.Length));
+            this.DeletePath(path);
+            this.NotifyChange("delete", ConsoleColor.Red, path);
         }
 
         protected void OnError(Exception exception)
         {
             Console.Error.WriteLine(exception);
+        }
+
+        protected virtual void NotifyChange(string action, ConsoleColor color, string path)
+        {
+            Console.ForegroundColor = color;
+            Console.Write(action.ToUpper() + " ");
+            Console.ResetColor();
+            Console.WriteLine(path.Substring(rootPath.Length));
+        }
+
+        protected virtual void UpdatePath(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual void DeletePath(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual bool IsFolder(string path)
+        {
+            return Directory.Exists(path);
+        }
+
+        protected virtual IEnumerable<string> ListFilesInFolder(string folderPath)
+        {
+            return Directory.EnumerateFiles(folderPath, "*.*", SearchOption.AllDirectories);
         }
     }
 }
