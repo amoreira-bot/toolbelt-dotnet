@@ -1,4 +1,5 @@
 ﻿using System;
+using Vtex.Toolbelt.Core;
 
 namespace Vtex.Toolbelt.Cli.Commands
 {
@@ -17,6 +18,9 @@ namespace Vtex.Toolbelt.Cli.Commands
         {
             Console.WriteLine("Run for account '{0}' and session '{1}'", accountName, sessionName);
             Console.WriteLine(Environment.CurrentDirectory);
+
+            var watcher = new Watcher(this.accountName, this.sessionName, Environment.CurrentDirectory);
+            watcher.Start();
 
             Console.WriteLine("Press \'q\' to quit.");
             while (Console.Read() != 'q') ;
