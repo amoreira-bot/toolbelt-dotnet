@@ -9,6 +9,7 @@ namespace Vtex.Toolbelt.Core
         private readonly string accountName;
         private readonly string sessionName;
         private readonly string rootPath;
+        private readonly Debouncer debouncer;
 
         private FileSystemWatcher fileSystemWatcher;
 
@@ -19,6 +20,7 @@ namespace Vtex.Toolbelt.Core
             this.accountName = accountName;
             this.sessionName = sessionName;
             this.rootPath = rootPath;
+            this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(300));
         }
 
         public void Start()
@@ -113,7 +115,7 @@ namespace Vtex.Toolbelt.Core
 
         protected virtual void Debounce()
         {
-            throw new NotImplementedException();
+            this.debouncer.Debounce(() => Console.WriteLine("sent!"));
         }
 
         protected virtual bool IsFolder(string path)
