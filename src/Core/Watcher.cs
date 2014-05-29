@@ -41,7 +41,7 @@ namespace Vtex.Toolbelt.Core
 
         private FileSystemWatcher CreateFileSystemWatcher()
         {
-            var watcher = new FileSystemWatcher(Path.Combine(this.rootPath, accountName));
+            var watcher = new FileSystemWatcher(this.rootPath);
             watcher.IncludeSubdirectories = true;
 
             watcher.Created += (sender, args) => this.OnCreated(args.FullPath);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Vtex.Toolbelt.Core;
 
 namespace Vtex.Toolbelt.Cli.Commands
@@ -17,9 +18,11 @@ namespace Vtex.Toolbelt.Cli.Commands
         public override void Run()
         {
             Console.WriteLine("Run for account '{0}' and session '{1}'", accountName, sessionName);
-            Console.WriteLine(Environment.CurrentDirectory);
 
-            var watcher = new Watcher(this.accountName, this.sessionName, Environment.CurrentDirectory);
+            var rootPath = Path.Combine(Environment.CurrentDirectory, this.accountName);
+            Console.WriteLine("Watching '{0}' for changes", rootPath);
+
+            var watcher = new Watcher(this.accountName, this.sessionName, rootPath);
             watcher.Start();
 
             Console.WriteLine("Press \'q\' to quit.");
