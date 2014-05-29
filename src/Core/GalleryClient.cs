@@ -27,10 +27,10 @@ namespace Vtex.Toolbelt.Core
 
         public event Action<RequestFailedArgs> RequestFailed;
 
-        public IEnumerable<Change> SendChanges(Change[] changes)
+        public IEnumerable<Change> SendChanges(Change[] changes, bool resync = false)
         {
             var result = SummarizeChanges(changes).ToArray();
-            this.SendRequest(result);
+            this.SendRequest(result, resync);
             return result;
         }
 
@@ -78,7 +78,7 @@ namespace Vtex.Toolbelt.Core
             return path.Substring(this.rootPath.Length + 1).Replace('\\', '/');
         }
 
-        private void SendRequest(IEnumerable<Change> result)
+        private void SendRequest(IEnumerable<Change> result, bool resync = false)
         {
             var payload = new ChangeBatchRequest
             {
@@ -88,7 +88,7 @@ namespace Vtex.Toolbelt.Core
                 Changes = result.Select(change => ChangeRequest.FromChange(change, this.rootPath)).ToArray()
             };
 
-            var response = this.httpClient.PostAsync("development/changes",
+            var response = this.httpClient.PostAsync("development/changes" + (resync ? "?resync=true" : ""),
                 payload, new JsonMediaTypeFormatter()).Result;
 
             if (!response.IsSuccessStatusCode)

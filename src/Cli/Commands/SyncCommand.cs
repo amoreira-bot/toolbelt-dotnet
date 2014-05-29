@@ -27,6 +27,8 @@ namespace Vtex.Toolbelt.Cli.Commands
             watcher.ChangesSent += ChangesSent;
             watcher.RequestFailed += RequestFailed;
             watcher.FileSystemError += exception => Console.Error.WriteLine(exception);
+
+            watcher.Resync();
             watcher.Start();
 
             Console.WriteLine("Press \'q\' to quit.");

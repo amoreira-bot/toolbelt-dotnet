@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Vtex.Toolbelt.Core
@@ -45,6 +46,14 @@ namespace Vtex.Toolbelt.Core
         {
             if (fileSystemWatcher != null)
                 fileSystemWatcher.EnableRaisingEvents = false;
+        }
+
+        public void Resync()
+        {
+            var changes = this.ListFilesInFolder(this.rootPath)
+                .Select(path => new Change(ChangeAction.Update, path));
+            var sentChanges = this.galleryClient.SendChanges(changes.ToArray(), true);
+            this.ChangesSent(sentChanges);
         }
 
         private FileSystemWatcher CreateFileSystemWatcher()
