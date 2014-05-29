@@ -10,6 +10,7 @@ namespace Vtex.Toolbelt.Core
         private readonly string sessionName;
         private readonly string rootPath;
         private readonly Debouncer debouncer;
+        private readonly GalleryClient galleryClient;
 
         private FileSystemWatcher fileSystemWatcher;
 
@@ -21,6 +22,7 @@ namespace Vtex.Toolbelt.Core
             this.sessionName = sessionName;
             this.rootPath = rootPath;
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(300));
+            this.galleryClient = new GalleryClient(rootPath);
         }
 
         public void Start()
@@ -61,15 +63,11 @@ namespace Vtex.Toolbelt.Core
             {
                 var filePaths = this.ListFilesInFolder(path);
                 foreach (var file in filePaths)
-                {
                     this.UpdatePath(file);
-                    this.NotifyChange("create", ConsoleColor.Green, file);
-                }
             }
             else
             {
                 this.UpdatePath(path);
-                this.NotifyChange("create", ConsoleColor.Green, path);
             }
         }
 
@@ -79,13 +77,11 @@ namespace Vtex.Toolbelt.Core
                 return;
 
            this.UpdatePath(path);
-           this.NotifyChange("update", ConsoleColor.Cyan, path);
         }
 
         protected void OnDeleted(string path)
         {
             this.DeletePath(path);
-            this.NotifyChange("delete", ConsoleColor.Red, path);
         }
 
         protected void OnError(Exception exception)
@@ -98,7 +94,7 @@ namespace Vtex.Toolbelt.Core
             Console.ForegroundColor = color;
             Console.Write(action.ToUpper() + " ");
             Console.ResetColor();
-            Console.WriteLine(path.Substring(rootPath.Length));
+            Console.WriteLine(path);
         }
 
         protected virtual void UpdatePath(string path)
@@ -115,7 +111,16 @@ namespace Vtex.Toolbelt.Core
 
         protected virtual void Debounce()
         {
-            this.debouncer.Debounce(() => Console.WriteLine("sent!"));
+            this.debouncer.Debounce(() =>
+            {
+                var sentChanges = this.galleryClient.SendChanges(this.Changes.ToArray());
+                this.Changes.Clear();
+                foreach (var change in sentChanges)
+                {
+                    this.NotifyChange(change.Action.ToString(),
+                        change.Action == ChangeAction.Update ? ConsoleColor.Cyan : ConsoleColor.Red, change.Path);
+                }
+            });
         }
 
         protected virtual bool IsFolder(string path)

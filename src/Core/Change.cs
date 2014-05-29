@@ -1,6 +1,8 @@
+using System;
+
 namespace Vtex.Toolbelt.Core
 {
-    public class Change
+    public class Change : IEquatable<Change>
     {
         public ChangeAction Action { get; set; }
         public string Path { get; set; }
@@ -9,6 +11,16 @@ namespace Vtex.Toolbelt.Core
         {
             this.Action = action;
             this.Path = path;
+        }
+
+        public bool Equals(Change other)
+        {
+            return this.Action == other.Action && this.Path == other.Path;
+        }
+
+        public override string ToString()
+        {
+            return string.Join(" ", this.Action, this.Path);
         }
     }
 
