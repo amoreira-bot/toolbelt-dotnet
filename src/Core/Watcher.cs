@@ -22,7 +22,7 @@ namespace Vtex.Toolbelt.Core
             this.sessionName = sessionName;
             this.rootPath = rootPath;
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(300));
-            this.galleryClient = new GalleryClient(rootPath);
+            this.galleryClient = new GalleryClient(accountName, sessionName, rootPath);
         }
 
         public void Start()
@@ -120,6 +120,7 @@ namespace Vtex.Toolbelt.Core
                     this.NotifyChange(change.Action.ToString(),
                         change.Action == ChangeAction.Update ? ConsoleColor.Cyan : ConsoleColor.Red, change.Path);
                 }
+                Console.WriteLine("waiting for changes...");
             });
         }
 

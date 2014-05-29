@@ -48,6 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Change.cs" />
+    <Compile Include="ChangeBatchRequest.cs" />
+    <Compile Include="ChangeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Debouncer.cs" />
     <Compile Include="GalleryClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

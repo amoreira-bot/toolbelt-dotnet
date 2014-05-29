@@ -176,7 +176,7 @@ namespace Vtex.Toolbelt.Tests
     public class TestableGalleryClient : GalleryClient
     {
         public TestableGalleryClient(string rootPath)
-            : base(rootPath)
+            : base(null, null, rootPath)
         {
         }
 

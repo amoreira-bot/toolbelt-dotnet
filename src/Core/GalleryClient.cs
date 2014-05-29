@@ -1,21 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Formatting;
 
 namespace Vtex.Toolbelt.Core
 {
     public class GalleryClient
     {
+        private readonly string accountName;
+        private readonly string sessionName;
         private readonly string rootPath;
+        private readonly HttpClient httpClient;
 
-        public GalleryClient(string rootPath)
+        public GalleryClient(string accountName, string sessionName, string rootPath)
         {
+            this.accountName = accountName;
+            this.sessionName = sessionName;
             this.rootPath = rootPath;
+            this.httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://gallery.vtexlocal.com.br/api/gallery/")
+            };
         }
 
         public IEnumerable<Change> SendChanges(Change[] changes)
         {
             var result = SummarizeChanges(changes).ToArray();
+            this.SendRequest(result);
             return result;
         }
 
@@ -61,6 +74,28 @@ namespace Vtex.Toolbelt.Core
         protected virtual string NormalizePath(string path)
         {
             return path.Substring(this.rootPath.Length + 1).Replace('\\', '/');
+        }
+
+        private void SendRequest(IEnumerable<Change> result)
+        {
+            var payload = new ChangeBatchRequest
+            {
+                AccountName = this.accountName,
+                Session = this.sessionName,
+                UserCookie = "fakevalue",
+                Changes = result.Select(change => ChangeRequest.FromChange(change, this.rootPath)).ToArray()
+            };
+
+            var response = this.httpClient.PostAsync("development/changes",
+                payload, new JsonMediaTypeFormatter()).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Request failed with status code {0} ({1})", response.StatusCode,
+                    (int)response.StatusCode);
+                Console.ResetColor();
+            }
         }
     }
 }
