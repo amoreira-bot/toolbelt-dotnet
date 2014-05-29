@@ -23,9 +23,12 @@ namespace Vtex.Toolbelt.Core
             this.rootPath = rootPath;
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(300));
             this.galleryClient = new GalleryClient(accountName, sessionName, rootPath);
+            this.galleryClient.RequestFailed += args => this.RequestFailed(args);
         }
 
         public event Action<IEnumerable<Change>> ChangesSent;
+
+        public event Action<RequestFailedArgs> RequestFailed;
 
         public void Start()
         {

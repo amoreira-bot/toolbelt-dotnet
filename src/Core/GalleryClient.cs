@@ -25,6 +25,8 @@ namespace Vtex.Toolbelt.Core
             };
         }
 
+        public event Action<RequestFailedArgs> RequestFailed;
+
         public IEnumerable<Change> SendChanges(Change[] changes)
         {
             var result = SummarizeChanges(changes).ToArray();
@@ -91,11 +93,21 @@ namespace Vtex.Toolbelt.Core
 
             if (!response.IsSuccessStatusCode)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Request failed with status code {0} ({1})", response.StatusCode,
-                    (int)response.StatusCode);
-                Console.ResetColor();
+                var args = new RequestFailedArgs(response.StatusCode.ToString(), (int) response.StatusCode);
+                this.RequestFailed(args);
             }
+        }
+    }
+
+    public class RequestFailedArgs
+    {
+        public string StatusCodeText { get; private set; }
+        public int StatusCode { get; private set; }
+
+        public RequestFailedArgs(string statusCodeText, int statusCode)
+        {
+            StatusCodeText = statusCodeText;
+            StatusCode = statusCode;
         }
     }
 }

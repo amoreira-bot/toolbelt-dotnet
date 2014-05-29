@@ -25,6 +25,7 @@ namespace Vtex.Toolbelt.Cli.Commands
 
             var watcher = new Watcher(this.accountName, this.sessionName, rootPath);
             watcher.ChangesSent += ChangesSent;
+            watcher.RequestFailed += RequestFailed;
             watcher.Start();
 
             Console.WriteLine("Press \'q\' to quit.");
@@ -41,6 +42,13 @@ namespace Vtex.Toolbelt.Cli.Commands
                 Console.WriteLine(change.Path);
             }
             Console.WriteLine("waiting for changes...");
+        }
+
+        public void RequestFailed(RequestFailedArgs args)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Request failed with status code {0} ({1})", args.StatusCodeText, args.StatusCode);
+            Console.ResetColor();
         }
     }
 }
