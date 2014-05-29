@@ -73,10 +73,6 @@ namespace Vtex.Toolbelt.Tests
             return this.folders[folderPath];
         }
 
-        protected override void NotifyChange(string action, ConsoleColor color, string path)
-        {
-        }
-
         public void AddFolder(string folderPath, string[] filePaths)
         {
             this.folders.Add(folderPath, filePaths);

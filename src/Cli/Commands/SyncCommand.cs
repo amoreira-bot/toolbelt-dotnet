@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Vtex.Toolbelt.Core;
 
@@ -23,10 +24,23 @@ namespace Vtex.Toolbelt.Cli.Commands
             Console.WriteLine("Watching '{0}' for changes", rootPath);
 
             var watcher = new Watcher(this.accountName, this.sessionName, rootPath);
+            watcher.ChangesSent += ChangesSent;
             watcher.Start();
 
             Console.WriteLine("Press \'q\' to quit.");
             while (Console.Read() != 'q') ;
+        }
+
+        public void ChangesSent(IEnumerable<Change> changes)
+        {
+            foreach (var change in changes)
+            {
+                Console.ForegroundColor = change.Action == ChangeAction.Update ? ConsoleColor.Cyan : ConsoleColor.Red;
+                Console.Write(change.Action.ToString().ToUpper() + " ");
+                Console.ResetColor();
+                Console.WriteLine(change.Path);
+            }
+            Console.WriteLine("waiting for changes...");
         }
     }
 }

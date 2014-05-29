@@ -25,6 +25,8 @@ namespace Vtex.Toolbelt.Core
             this.galleryClient = new GalleryClient(accountName, sessionName, rootPath);
         }
 
+        public event Action<IEnumerable<Change>> ChangesSent;
+
         public void Start()
         {
             if (fileSystemWatcher == null)
@@ -89,14 +91,6 @@ namespace Vtex.Toolbelt.Core
             Console.Error.WriteLine(exception);
         }
 
-        protected virtual void NotifyChange(string action, ConsoleColor color, string path)
-        {
-            Console.ForegroundColor = color;
-            Console.Write(action.ToUpper() + " ");
-            Console.ResetColor();
-            Console.WriteLine(path);
-        }
-
         protected virtual void UpdatePath(string path)
         {
             this.Changes.Add(new Change(ChangeAction.Update, path));
@@ -115,12 +109,7 @@ namespace Vtex.Toolbelt.Core
             {
                 var sentChanges = this.galleryClient.SendChanges(this.Changes.ToArray());
                 this.Changes.Clear();
-                foreach (var change in sentChanges)
-                {
-                    this.NotifyChange(change.Action.ToString(),
-                        change.Action == ChangeAction.Update ? ConsoleColor.Cyan : ConsoleColor.Red, change.Path);
-                }
-                Console.WriteLine("waiting for changes...");
+                this.ChangesSent(sentChanges);
             });
         }
 
