@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Vtex.Toolbelt.Core
 {
@@ -120,7 +121,23 @@ namespace Vtex.Toolbelt.Core
 
         protected virtual IEnumerable<string> ListFilesInFolder(string folderPath)
         {
-            return Directory.EnumerateFiles(folderPath, "*.*", SearchOption.AllDirectories);
+            var i = 0;
+            const int maxRetries = 5;
+            while (true)
+            {
+                i++;
+                try
+                {
+                    return Directory.EnumerateFiles(folderPath, "*.*", SearchOption.AllDirectories);
+                }
+                catch
+                {
+                    if (i < maxRetries)
+                        Task.Delay(5).Wait();
+                    else
+                        throw;
+                }
+            }
         }
     }
 }
