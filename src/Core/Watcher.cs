@@ -30,6 +30,8 @@ namespace Vtex.Toolbelt.Core
 
         public event Action<RequestFailedArgs> RequestFailed;
 
+        public event Action<Exception> FileSystemError;
+
         public void Start()
         {
             if (fileSystemWatcher == null)
@@ -58,7 +60,7 @@ namespace Vtex.Toolbelt.Core
                 this.OnCreated(args.FullPath);
             };
 
-            watcher.Error += (sender, args) => this.OnError(args.GetException());
+            watcher.Error += (sender, args) => this.FileSystemError(args.GetException());
             return watcher;
         }
 
@@ -87,11 +89,6 @@ namespace Vtex.Toolbelt.Core
         protected void OnDeleted(string path)
         {
             this.DeletePath(path);
-        }
-
-        protected void OnError(Exception exception)
-        {
-            Console.Error.WriteLine(exception);
         }
 
         protected virtual void UpdatePath(string path)
