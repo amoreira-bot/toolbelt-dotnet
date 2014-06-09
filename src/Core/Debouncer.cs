@@ -7,7 +7,7 @@ namespace Vtex.Toolbelt.Core
     public class Debouncer
     {
         private readonly TimeSpan delay;
-        private CancellationTokenSource cancellationTokenSource;
+        private int debounceCount;
 
         public Debouncer(TimeSpan delay)
         {
@@ -16,12 +16,12 @@ namespace Vtex.Toolbelt.Core
 
         public void Debounce(Action action)
         {
-            if (this.cancellationTokenSource != null)
-                this.cancellationTokenSource.Cancel();
-
-            this.cancellationTokenSource = new CancellationTokenSource();
-            Task.Delay(delay, this.cancellationTokenSource.Token)
-                .ContinueWith((task) => action(), TaskContinuationOptions.NotOnCanceled);
+            int current = ++debounceCount;
+            Task.Delay(delay).ContinueWith((task) =>
+                {
+                    if (debounceCount == current)
+                        action();
+                });
         }
     }
 }
