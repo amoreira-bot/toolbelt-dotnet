@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ProductAssemblyInfo.cs">
+      <Link>Properties\ProductAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Change.cs" />
     <Compile Include="ChangeBatchRequest.cs" />
     <Compile Include="ChangeRequest.cs">

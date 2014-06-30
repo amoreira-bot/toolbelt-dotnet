@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{98358213-65E9-4BDE-B643-2D9AA7EFED74}"
 EndProject
@@ -12,6 +12,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E0269CB0-52D5-43BD-89A5-5849B55DF312}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A7284C5-52B7-4273-89F0-F3DDFD1BEFC1}"
+	ProjectSection(SolutionItems) = preProject
+		ProductAssemblyInfo.cs = ProductAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Global
