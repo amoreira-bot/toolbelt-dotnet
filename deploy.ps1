@@ -30,6 +30,18 @@ if (!($currentTag -match "^v\d+\.\d+\.\d+")) {
 Status "Current version tag is $currentTag. Starting deployment."
 
 
+# Update AppVeyor build version
+$assemblyInfo = get-content src\ProductAssemblyInfo.cs
+$pattern = [regex]"AssemblyInformationalVersion\(""(.+?)""\)]"
+$version = $pattern.Match($assemblyInfo).Groups[1]
+
+if ($env:APPVEYOR) {
+  Status "Updating AppVeyor build version"
+  $buildNumber = $env:APPVEYOR_BUILD_NUMBER
+  Update-AppveyorBuild -Version "$version+$buildNumber"
+}
+
+
 # Create zip file
 $buildPath = '.\build'
 $artifactsPath = '.\artifacts'
@@ -38,10 +50,6 @@ $releasePath = '.\src\Cli\bin\Release'
 EnsureEmptyFolder $buildPath
 EnsureEmptyFolder $artifactsPath
 copy-item $releasePath\* -Destination $buildPath\ -exclude *.xml,*.pdb
-
-$assemblyInfo = get-content src\ProductAssemblyInfo.cs
-$pattern = [regex]"AssemblyInformationalVersion\(""(.+?)""\)]"
-$version = $pattern.Match($assemblyInfo).Groups[1]
 $fileName = "vtex-toolbelt-$version.zip"
 $fullFilePath = [System.IO.Path]::GetFullPath((Join-Path (pwd) $artifactsPath\$fileName))
 
@@ -69,11 +77,3 @@ try {
 Status "Publishing Chocolatey package."
 nuget pack .\chocolatey\vtex.toolbelt.nuspec -Version $version -OutputDirectory $artifactsPath
 nuget push $artifactsPath\*.nupkg -Source http://chocolatey.org/ -ApiKey $chocApiKey
-
-
-# Update AppVeyor build version
-if ($env:APPVEYOR) {
-  Status "Updating AppVeyor build version"
-  $buildNumber = $env:APPVEYOR_BUILD_NUMBER
-  Update-AppveyorBuild -Version "$version+$buildNumber"
-}
