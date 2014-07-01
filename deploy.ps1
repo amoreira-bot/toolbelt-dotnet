@@ -20,7 +20,9 @@ function Status {
 
 
 # Identify current version tag
-$currentTag = git describe --tags --exact-match
+try {
+  $currentTag = git describe --tags --exact-match
+} catch {}
 if (!($currentTag -match "^v\d+\.\d+\.\d+")) {
   echo "Nothing to do. Current tag ($currentTag) is not a version tag."
   exit
@@ -51,12 +53,16 @@ $src = [System.IO.Path]::GetFullPath((Join-Path (pwd) $buildPath\))
 # Upload zip file to S3
 Status "Uploading $artifactsPath\$fileName to S3 bucket."
 
-Set-AWSCredentials -AccessKey $awsAccessKey -SecretKey $awsSecretKey -StoreAs DefaultProfile
-Initialize-AWSDefaults -ProfileName DefaultProfile -Region us-east-1
+try {
+  Initialize-AWSDefaults -AccessKey $awsAccessKey -SecretKey $awsSecretKey
 
-Write-S3Object -BucketName 'vtex-io' -Key "toolbelt/$fileName" -File $fullFilePath
+  Write-S3Object -BucketName 'vtex-io' -Key "toolbelt/$fileName" -File $fullFilePath
 
-Clear-AWSCredentials -StoredCredentials DefaultProfile
+  Clear-AWSCredentials
+} catch {
+  throw
+  exit 1
+}
 
 
 # Create and publish Chocolatey package
