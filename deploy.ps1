@@ -69,6 +69,7 @@ try {
   Clear-AWSCredentials
 } catch {
   throw
+  Write-Error $StackTrace
   exit 1
 }
 
