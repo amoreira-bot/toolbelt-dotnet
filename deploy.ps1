@@ -62,7 +62,7 @@ $src = [System.IO.Path]::GetFullPath((Join-Path (pwd) $buildPath\))
 Status "Uploading $artifactsPath\$fileName to S3 bucket."
 
 try {
-  Initialize-AWSDefaults -AccessKey $awsAccessKey -SecretKey $awsSecretKey
+  Initialize-AWSDefaults -AccessKey $awsAccessKey -SecretKey $awsSecretKey -Region "us-east-1"
 
   Write-S3Object -BucketName 'vtex-io' -Key "toolbelt/$fileName" -File $fullFilePath
 
