@@ -8,22 +8,22 @@ namespace Vtex.Toolbelt.Cli.Commands
     public class SyncCommand : Command
     {
         private readonly string accountName;
-        private readonly string sessionName;
+        private readonly string workspaceName;
 
         public SyncCommand(SyncVerbObtions options)
         {
             this.accountName = options.Account;
-            this.sessionName = options.Session;
+            this.workspaceName = options.Workspace;
         }
 
         public override void Run()
         {
-            Console.WriteLine("Run for account '{0}' and session '{1}'", accountName, sessionName);
+            Console.WriteLine("Run for account '{0}' and workspace '{1}'", accountName, workspaceName);
 
             var rootPath = Path.Combine(Environment.CurrentDirectory, this.accountName);
             Console.WriteLine("Watching '{0}' for changes", rootPath);
 
-            var watcher = new Watcher(this.accountName, this.sessionName, rootPath);
+            var watcher = new Watcher(this.accountName, this.workspaceName, rootPath);
             watcher.ChangesSent += ChangesSent;
             watcher.RequestFailed += RequestFailed;
             watcher.FileSystemError += exception => Console.Error.WriteLine(exception);
