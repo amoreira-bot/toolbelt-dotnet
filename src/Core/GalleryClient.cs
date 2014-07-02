@@ -14,14 +14,14 @@ namespace Vtex.Toolbelt.Core
         private readonly string rootPath;
         private readonly HttpClient httpClient;
 
-        public GalleryClient(string accountName, string workspaceName, string rootPath)
+        public GalleryClient(string accountName, string workspaceName, string rootPath, string endpointUrl)
         {
             this.accountName = accountName;
             this.workspaceName = workspaceName;
             this.rootPath = rootPath;
             this.httpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://gallery.vtexlocal.com.br/api/gallery/")
+                BaseAddress = new Uri(endpointUrl)
             };
         }
 

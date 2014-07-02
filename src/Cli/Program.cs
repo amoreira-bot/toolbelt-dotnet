@@ -36,7 +36,7 @@ namespace Vtex.Toolbelt.Cli
             switch (verb)
             {
                 case "sync":
-                    command = new SyncCommand((SyncVerbObtions) subOptions);
+                    command = new SyncCommand((SyncVerbObtions) subOptions, configuration);
                     break;
 
                 default:

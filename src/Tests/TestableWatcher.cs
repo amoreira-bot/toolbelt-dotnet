@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Vtex.Toolbelt.Core;
 
@@ -17,7 +16,7 @@ namespace Vtex.Toolbelt.Tests
         }
 
         public TestableWatcher()
-            : base(null, null, null)
+            : base(null, null, null, new Configuration())
         {
             this.UpdatedPaths = new List<string>();
             this.DeletedPaths = new List<string>();
