@@ -82,14 +82,14 @@ namespace Vtex.Toolbelt.Core
         {
             var payload = new ChangeBatchRequest
             {
-                AccountName = this.accountName,
-                Workspace = this.workspaceName,
-                UserCookie = "fakevalue",
+                Message = "File changes via VTEX Toolbelt",
                 Changes = result.Select(change => ChangeRequest.FromChange(change, this.rootPath)).ToArray()
             };
 
-            var response = this.httpClient.PostAsync("development/changes" + (resync ? "?resync=true" : ""),
-                payload, new JsonMediaTypeFormatter()).Result;
+            var path = string.Format("accounts/{0}/{1}/changes{2}", this.accountName, this.workspaceName,
+                resync ? "?resync=true" : "");
+
+            var response = this.httpClient.PostAsync(path, payload, new JsonMediaTypeFormatter()).Result;
 
             if (!response.IsSuccessStatusCode)
             {
