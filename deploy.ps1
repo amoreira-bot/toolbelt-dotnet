@@ -54,7 +54,7 @@ $fileName = "vtex-toolbelt-$version.zip"
 $fullFilePath = [System.IO.Path]::GetFullPath((Join-Path (pwd) $artifactsPath\$fileName))
 
 $src = [System.IO.Path]::GetFullPath((Join-Path (pwd) $buildPath\))
-[Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')
+[void][Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')
 [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $fullFilePath)
 
 
