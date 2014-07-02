@@ -1,5 +1,7 @@
 # VTEX Toolbelt
 
+[![Build status](https://ci.appveyor.com/api/projects/status/yys7qdt4u3y3ybu1)](https://ci.appveyor.com/project/rdumont/toolbelt-dotnet)
+
 ## Requisitos
 
 * Windows 7 ou superior
