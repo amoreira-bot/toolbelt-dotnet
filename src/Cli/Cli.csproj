@@ -52,6 +52,7 @@
     </Compile>
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="ConfigurationReader.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
