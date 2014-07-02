@@ -10,14 +10,14 @@ namespace Vtex.Toolbelt.Core
     public class GalleryClient
     {
         private readonly string accountName;
-        private readonly string sessionName;
+        private readonly string workspaceName;
         private readonly string rootPath;
         private readonly HttpClient httpClient;
 
-        public GalleryClient(string accountName, string sessionName, string rootPath)
+        public GalleryClient(string accountName, string workspaceName, string rootPath)
         {
             this.accountName = accountName;
-            this.sessionName = sessionName;
+            this.workspaceName = workspaceName;
             this.rootPath = rootPath;
             this.httpClient = new HttpClient
             {
@@ -83,7 +83,7 @@ namespace Vtex.Toolbelt.Core
             var payload = new ChangeBatchRequest
             {
                 AccountName = this.accountName,
-                Session = this.sessionName,
+                Workspace = this.workspaceName,
                 UserCookie = "fakevalue",
                 Changes = result.Select(change => ChangeRequest.FromChange(change, this.rootPath)).ToArray()
             };

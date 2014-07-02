@@ -9,7 +9,7 @@ namespace Vtex.Toolbelt.Core
     public class Watcher
     {
         private readonly string accountName;
-        private readonly string sessionName;
+        private readonly string workspaceName;
         private readonly string rootPath;
         private readonly Debouncer debouncer;
         private readonly GalleryClient galleryClient;
@@ -18,13 +18,13 @@ namespace Vtex.Toolbelt.Core
 
         protected readonly List<Change> Changes = new List<Change>(); 
 
-        public Watcher(string accountName, string sessionName, string rootPath)
+        public Watcher(string accountName, string workspaceName, string rootPath)
         {
             this.accountName = accountName;
-            this.sessionName = sessionName;
+            this.workspaceName = workspaceName;
             this.rootPath = rootPath;
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(300));
-            this.galleryClient = new GalleryClient(accountName, sessionName, rootPath);
+            this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath);
             this.galleryClient.RequestFailed += args => this.RequestFailed(args);
         }
 
