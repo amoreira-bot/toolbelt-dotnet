@@ -6,7 +6,7 @@ namespace Vtex.Toolbelt.Cli
     public class Options
     {
         [VerbOption("sync", HelpText = "Start synchronization job with a workspace")]
-        public SyncVerbObtions SyncVerb { get; set; }
+        public SyncVerbOptions SyncVerb { get; set; }
 
         [HelpVerbOption("help")]
         public string Help(string verb)

@@ -12,7 +12,7 @@ namespace Vtex.Toolbelt.Cli.Commands
         private readonly string workspaceName;
         private readonly LoginCommand loginCommand;
 
-        public SyncCommand(SyncVerbObtions options, Configuration configuration)
+        public SyncCommand(SyncVerbOptions options, Configuration configuration)
         {
             this.configuration = configuration;
             this.accountName = options.Account;

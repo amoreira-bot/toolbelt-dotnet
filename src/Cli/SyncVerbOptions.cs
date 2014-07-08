@@ -2,7 +2,7 @@
 
 namespace Vtex.Toolbelt.Cli
 {
-    public class SyncVerbObtions
+    public class SyncVerbOptions
     {
         [Option('a', "account", Required = true, HelpText = "Account name")]
         public string Account { get; set; }
