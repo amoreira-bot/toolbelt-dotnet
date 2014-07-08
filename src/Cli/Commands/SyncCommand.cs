@@ -29,7 +29,7 @@ namespace Vtex.Toolbelt.Cli.Commands
 
             Console.WriteLine("Run for account '{0}' and workspace '{1}'", package.Name, workspaceName);
 
-            var rootPath = Path.Combine(Environment.CurrentDirectory, package.Name);
+            var rootPath = Environment.CurrentDirectory;
             Console.WriteLine("Watching '{0}' for changes", rootPath);
 
             var watcher = new Watcher(package.Name, this.workspaceName, rootPath, credential.Token, configuration);
