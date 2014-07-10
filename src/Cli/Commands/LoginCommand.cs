@@ -24,6 +24,11 @@ namespace Vtex.Toolbelt.Cli.Commands
 
         public override void Run()
         {
+            GetValidCredential();
+        }
+
+        public Credential GetValidCredential()
+        {
             var credential = this.credentialStore.GetCurrent();
 
             if (credential == null || !this.Validate(credential))
@@ -31,6 +36,7 @@ namespace Vtex.Toolbelt.Cli.Commands
 
             Console.WriteLine("Logged in as {0}", credential.Email);
             this.credentialStore.Save(credential);
+            return credential;
         }
 
         private bool Validate(Credential credential)

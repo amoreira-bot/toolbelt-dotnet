@@ -22,14 +22,14 @@ namespace Vtex.Toolbelt.Cli.Commands
 
         public override void Run()
         {
-            loginCommand.Run();
+            var credential = loginCommand.GetValidCredential();
 
             Console.WriteLine("Run for account '{0}' and workspace '{1}'", accountName, workspaceName);
 
             var rootPath = Path.Combine(Environment.CurrentDirectory, this.accountName);
             Console.WriteLine("Watching '{0}' for changes", rootPath);
 
-            var watcher = new Watcher(this.accountName, this.workspaceName, rootPath, configuration);
+            var watcher = new Watcher(this.accountName, this.workspaceName, rootPath, credential.Token, configuration);
             watcher.ChangesSent += ChangesSent;
             watcher.RequestFailed += RequestFailed;
             watcher.FileSystemError += exception => Console.Error.WriteLine(exception);

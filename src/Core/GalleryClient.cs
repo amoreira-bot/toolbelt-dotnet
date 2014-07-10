@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 
 namespace Vtex.Toolbelt.Core
 {
@@ -14,7 +15,8 @@ namespace Vtex.Toolbelt.Core
         private readonly string rootPath;
         private readonly HttpClient httpClient;
 
-        public GalleryClient(string accountName, string workspaceName, string rootPath, string endpointUrl)
+        public GalleryClient(string accountName, string workspaceName, string rootPath, string authenticationToken,
+            string endpointUrl)
         {
             this.accountName = accountName;
             this.workspaceName = workspaceName;
@@ -23,6 +25,8 @@ namespace Vtex.Toolbelt.Core
             {
                 BaseAddress = new Uri(endpointUrl)
             };
+            this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token",
+                authenticationToken);
         }
 
         public event Action<RequestFailedArgs> RequestFailed;
