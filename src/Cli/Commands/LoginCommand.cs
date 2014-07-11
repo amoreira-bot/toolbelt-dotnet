@@ -6,18 +6,16 @@ namespace Vtex.Toolbelt.Cli.Commands
 {
     public class LoginCommand : Command
     {
-        private readonly string accountName;
         private readonly CredentialStore credentialStore;
         private readonly AuthenticationService authentication;
 
-        public LoginCommand(string accountName)
-            : this(accountName, new CredentialStore(), new AuthenticationService())
+        public LoginCommand()
+            : this(new CredentialStore(), new AuthenticationService())
         {
         }
 
-        protected LoginCommand(string accountName, CredentialStore credentialStore, AuthenticationService authentication)
+        protected LoginCommand(CredentialStore credentialStore, AuthenticationService authentication)
         {
-            this.accountName = accountName;
             this.credentialStore = credentialStore;
             this.authentication = authentication;
         }
