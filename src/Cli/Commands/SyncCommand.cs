@@ -17,7 +17,7 @@ namespace Vtex.Toolbelt.Cli.Commands
             this.configuration = configuration;
             this.accountName = options.Account;
             this.workspaceName = options.Workspace;
-            this.loginCommand = new LoginCommand(this.accountName);
+            this.loginCommand = new LoginCommand();
         }
 
         public override void Run()
