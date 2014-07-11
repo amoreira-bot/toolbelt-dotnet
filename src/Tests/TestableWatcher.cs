@@ -16,7 +16,7 @@ namespace Vtex.Toolbelt.Tests
         }
 
         public TestableWatcher()
-            : base(null, null, null, new Configuration())
+            : base(null, null, null, null, new Configuration())
         {
             this.UpdatedPaths = new List<string>();
             this.DeletedPaths = new List<string>();

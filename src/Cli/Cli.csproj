@@ -51,6 +51,7 @@
       <Link>Properties\ProductAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
     <Compile Include="ConfigurationReader.cs" />
     <Compile Include="Options.cs" />

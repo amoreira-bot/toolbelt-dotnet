@@ -56,9 +56,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration.cs" />
+    <Compile Include="Credential.cs" />
+    <Compile Include="CredentialStore.cs" />
     <Compile Include="Debouncer.cs" />
     <Compile Include="GalleryClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Watcher.cs" />
   </ItemGroup>
   <ItemGroup>

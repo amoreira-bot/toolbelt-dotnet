@@ -10,22 +10,26 @@ namespace Vtex.Toolbelt.Cli.Commands
         private readonly Configuration configuration;
         private readonly string accountName;
         private readonly string workspaceName;
+        private readonly LoginCommand loginCommand;
 
         public SyncCommand(SyncVerbObtions options, Configuration configuration)
         {
             this.configuration = configuration;
             this.accountName = options.Account;
             this.workspaceName = options.Workspace;
+            this.loginCommand = new LoginCommand(this.accountName);
         }
 
         public override void Run()
         {
+            var credential = loginCommand.GetValidCredential();
+
             Console.WriteLine("Run for account '{0}' and workspace '{1}'", accountName, workspaceName);
 
             var rootPath = Path.Combine(Environment.CurrentDirectory, this.accountName);
             Console.WriteLine("Watching '{0}' for changes", rootPath);
 
-            var watcher = new Watcher(this.accountName, this.workspaceName, rootPath, configuration);
+            var watcher = new Watcher(this.accountName, this.workspaceName, rootPath, credential.Token, configuration);
             watcher.ChangesSent += ChangesSent;
             watcher.RequestFailed += RequestFailed;
             watcher.FileSystemError += exception => Console.Error.WriteLine(exception);

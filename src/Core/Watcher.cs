@@ -18,13 +18,15 @@ namespace Vtex.Toolbelt.Core
 
         protected readonly List<Change> Changes = new List<Change>(); 
 
-        public Watcher(string accountName, string workspaceName, string rootPath, Configuration configuration)
+        public Watcher(string accountName, string workspaceName, string rootPath, string authenticationToken,
+            Configuration configuration)
         {
             this.accountName = accountName;
             this.workspaceName = workspaceName;
             this.rootPath = rootPath;
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(configuration.FileSystemDelay));
-            this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath, configuration.GalleryEndpoint);
+            this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath, authenticationToken,
+                configuration.GalleryEndpoint);
             this.galleryClient.RequestFailed += args => this.RequestFailed(args);
         }
 
