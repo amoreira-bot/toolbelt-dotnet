@@ -67,6 +67,9 @@
     </Compile>
     <Compile Include="CommandDispatcher.cs" />
     <Compile Include="CommandHelpAttribute.cs" />
+    <Compile Include="CompositeCommandMatcher.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DefaultServices.cs" />
     <Compile Include="DispatchException.cs" />
     <Compile Include="ICommandMatcher.cs">
