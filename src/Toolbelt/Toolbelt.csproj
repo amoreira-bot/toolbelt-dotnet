@@ -61,6 +61,9 @@
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>Properties\ProductAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="DefaultServices.cs" />
+    <Compile Include="DispatchException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
