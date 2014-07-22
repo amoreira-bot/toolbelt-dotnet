@@ -49,6 +49,7 @@
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
     <Compile Include="MockExtensions\MoqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeNameCommandMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
