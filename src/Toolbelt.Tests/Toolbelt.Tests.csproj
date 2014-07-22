@@ -45,10 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandDispatcherTests.cs" />
+    <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
+    <Compile Include="MockExtensions\MoqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Toolbelt\Toolbelt.csproj">
+      <Project>{C0183819-3E62-4D5E-A7B3-2A8116349C9D}</Project>
+      <Name>Toolbelt</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

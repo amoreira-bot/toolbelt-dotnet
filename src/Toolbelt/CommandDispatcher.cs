@@ -1,10 +1,39 @@
-﻿namespace Vtex.Toolbelt
+﻿using System;
+using System.Linq;
+
+namespace Vtex.Toolbelt
 {
     public class CommandDispatcher
     {
+        private readonly ICommandMatcher _commandMatcher;
+        private readonly IServiceProvider _services;
+
+        public CommandDispatcher(ICommandMatcher commandMatcher, IServiceProvider services)
+        {
+            _commandMatcher = commandMatcher;
+            _services = services;
+        }
+
         public void Dispatch(string[] args)
         {
-            throw new DispatchException("Not implemented");
+            Type commandType;
+            int usedArgCount;
+            if (!_commandMatcher.TryGetMatchedType(args, out commandType, out usedArgCount))
+            {
+                throw new DispatchException(string.Format("The command \"{0}\" doesn't match a command or alias",
+                    string.Join(" ", args)));
+            }
+
+            var command = (Command)_services.GetService(commandType);
+            var commandArgs = args.Skip(usedArgCount).ToArray();
+            try
+            {
+                command.Execute(commandArgs);
+            }
+            catch (Exception exception)
+            {
+                throw new DispatchException(exception.Message);
+            }
         }
     }
 }
