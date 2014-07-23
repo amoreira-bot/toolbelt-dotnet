@@ -10,6 +10,7 @@ namespace Vtex.Toolbelt
         public static void RegisterTo(Container container)
         {
             container.RegisterSingle<IServiceProvider>(container);
+            container.RegisterSingle<IConsole>(new ColoredConsole());
 
             var commandTypes = Assembly.GetExecutingAssembly().GetExportedTypes()
                 .Where(type => typeof (Command).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract)
