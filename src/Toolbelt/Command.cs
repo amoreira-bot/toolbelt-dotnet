@@ -1,8 +1,8 @@
 ﻿namespace Vtex.Toolbelt
 {
-    public class Command
+    public abstract class Command : ICommand
     {
-        public virtual void Execute(string[] args)
+        public void Execute(string invokedWith, string[] args)
         {
             throw new System.NotImplementedException();
         }

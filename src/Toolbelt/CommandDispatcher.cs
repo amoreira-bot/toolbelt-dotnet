@@ -24,11 +24,11 @@ namespace Vtex.Toolbelt
                     string.Join(" ", args)));
             }
 
-            var command = (Command)_services.GetService(commandType);
+            var command = (ICommand)_services.GetService(commandType);
             var commandArgs = args.Skip(usedArgCount).ToArray();
             try
             {
-                command.Execute(commandArgs);
+                command.Execute(string.Join(" ", args.Take(usedArgCount)), commandArgs);
             }
             catch (Exception exception)
             {

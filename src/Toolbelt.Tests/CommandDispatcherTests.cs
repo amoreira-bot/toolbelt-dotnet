@@ -25,8 +25,8 @@ namespace Vtex.Toolbelt.Tests
             public void Throws_dispatch_exception_when_command_execution_fails()
             {
                 // Arrange
-                var command = Mock.Of<Command>();
-                command.Setup(c => c.Execute(new[] {"foo"})).Throws<InvalidOperationException>();
+                var command = Mock.Of<ICommand>();
+                command.Setup(c => c.Execute("", new[] {"foo"})).Throws<InvalidOperationException>();
 
                 var services = Mock.Of<IServiceProvider>(s => s.GetService(command.GetType()) == command);
 
@@ -44,7 +44,7 @@ namespace Vtex.Toolbelt.Tests
             public void Excecutes_command_with_correct_arguments()
             {
                 // Arrange
-                var command = Mock.Of<Command>();
+                var command = Mock.Of<ICommand>();
                 var services = Mock.Of<IServiceProvider>(s => s.GetService(command.GetType()) == command);
 
                 var commandMatcher = Mock.Of<ICommandMatcher>()
@@ -56,7 +56,7 @@ namespace Vtex.Toolbelt.Tests
                 dispatcher.Dispatch(new[] {"do", "some", "thing"});
 
                 // Verify
-                Mock.Get(command).Verify(c => c.Execute(new[] {"thing"}));
+                Mock.Get(command).Verify(c => c.Execute("do some", new[] {"thing"}));
             }
         }
     }
