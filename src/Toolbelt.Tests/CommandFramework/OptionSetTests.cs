@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.IO;
+using NUnit.Framework;
 using Vtex.Toolbelt.CommandFramework;
 
 namespace Vtex.Toolbelt.Tests.CommandFramework
@@ -295,6 +296,160 @@ namespace Vtex.Toolbelt.Tests.CommandFramework
                 // Act & Assert
                 Assert.That(options.Validate, Throws.TypeOf<OptionsValidationException>()
                     .With.Message.Contains("shorthands are not unique"));
+            }
+        }
+
+        class GetParametersUsage
+        {
+            [Test]
+            public void Returns_empty_when_there_are_no_parameters()
+            {
+                // Arrange
+                var options = new OptionSet();
+
+                // Act
+                var usage = options.GetParametersUsage();
+
+                // Assert
+                Assert.That(usage, Is.Empty);
+            }
+
+            [Test]
+            public void Returns_an_optional_parameter_identified_by_its_name()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {0, "foo", "the foo", value => { }}
+                };
+
+                // Act
+                var usage = options.GetParametersUsage();
+
+                // Assert
+                Assert.That(usage, Is.EqualTo("[<foo>]"));
+            }
+
+            [Test]
+            public void Returns_a_required_parameter_identified_by_its_name()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {0, "foo", "the foo", true, value => { }}
+                };
+
+                // Act
+                var usage = options.GetParametersUsage();
+
+                // Assert
+                Assert.That(usage, Is.EqualTo("<foo>"));
+            }
+
+            [Test]
+            public void Returns_parameters_ordered_by_position()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {3, "foo", "the foo", true, value => { }},
+                    {1, "bar", "the bar", true, value => { }},
+                    {2, "zaz", "the zaz", value => { }}
+                };
+
+                // Act
+                var usage = options.GetParametersUsage();
+
+                // Assert
+                Assert.That(usage, Is.EqualTo("<bar> [<zaz>] <foo>"));
+            }
+        }
+
+        class WriteNamedOptionsUsage
+        {
+            [Test]
+            public void Writes_nothing_if_there_are_no_options()
+            {
+                // Arrange
+                var options = new OptionSet();
+                var writer = new StringWriter();
+
+                // Act
+                options.WriteNamedOptionsUsage(writer);
+
+                // Assert
+                Assert.That(writer.ToString(), Is.Empty);
+            }
+
+            [Test]
+            public void Ignores_all_parameters()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {0, "foo", "foo value", value => { }}
+                };
+                var writer = new StringWriter();
+
+                // Act
+                options.WriteNamedOptionsUsage(writer);
+
+                // Assert
+                Assert.That(writer.ToString(), Is.Empty);
+            }
+
+            [Test]
+            public void Writes_help_for_a_flag()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {"foo", 'f', "foos all things", () => { }}
+                };
+                var writer = new StringWriter();
+
+                // Act
+                options.WriteNamedOptionsUsage(writer);
+
+                // Assert
+                Assert.That(writer.ToString().TrimEnd(),
+                    Is.EqualTo("    -f, --foo             foos all things"));
+            }
+
+            [Test]
+            public void Writes_help_for_a_value()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {"foo", 'f', "foos all things", value => { }}
+                };
+                var writer = new StringWriter();
+
+                // Act
+                options.WriteNamedOptionsUsage(writer);
+
+                // Assert
+                Assert.That(writer.ToString().TrimEnd(),
+                    Is.EqualTo("    -f, --foo <value>     foos all things"));
+            }
+
+            [Test]
+            public void Writes_help_for_a_required_option()
+            {
+                // Arrange
+                var options = new OptionSet
+                {
+                    {"foo", 'f', "foos all things", true, value => { }}
+                };
+                var writer = new StringWriter();
+
+                // Act
+                options.WriteNamedOptionsUsage(writer);
+
+                // Assert
+                Assert.That(writer.ToString().TrimEnd(),
+                    Is.EqualTo("    -f, --foo <value>     required - foos all things"));
             }
         }
     }

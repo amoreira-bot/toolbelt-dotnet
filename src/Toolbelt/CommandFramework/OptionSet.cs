@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Vtex.Toolbelt.CommandFramework
@@ -91,6 +92,35 @@ namespace Vtex.Toolbelt.CommandFramework
         {
             Validate(this.Where(o => o is NamedOption).Cast<NamedOption>().ToArray());
             Validate(this.Where(o => o is ParameterOption).Cast<ParameterOption>().ToArray());
+        }
+
+        public string GetParametersUsage()
+        {
+            return string.Join(" ", this.Where(o => o is ParameterOption)
+                .Cast<ParameterOption>().OrderBy(p => p.Position)
+                .Select(p => p.Required ? "<" + p.Name + ">" : "[<" + p.Name + ">]"));
+        }
+
+        public void WriteNamedOptionsUsage(TextWriter writer)
+        {
+            foreach (var option in this.Where(o => o is NamedOption).Cast<NamedOption>())
+            {
+                var usage = option is FlagOption
+                    ? string.Format("-{0}, --{1}", option.Shorthand, option.Name)
+                    : string.Format("-{0}, --{1} <value>", option.Shorthand, option.Name);
+
+                var description = option.Required ? "required - " + option.Description : option.Description;
+
+                if (usage.Length < 22)
+                {
+                    writer.WriteLine("    {0, -22}{1}", usage, description);
+                }
+                else
+                {
+                    writer.WriteLine("    " + usage);
+                    writer.WriteLine("                      " + description);
+                }
+            }
         }
 
         private static void Validate(ICollection<NamedOption> options)
