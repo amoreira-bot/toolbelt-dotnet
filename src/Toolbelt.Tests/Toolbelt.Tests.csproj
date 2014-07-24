@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AliasCommandMatcherTests.cs" />
     <Compile Include="CommandDispatcherTests.cs" />
+    <Compile Include="CommandFramework\OptionSetTests.cs" />
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
     <Compile Include="MockExtensions\MoqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

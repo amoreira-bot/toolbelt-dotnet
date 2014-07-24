@@ -66,6 +66,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="CommandFramework\OptionSyntaxException.cs" />
+    <Compile Include="CommandFramework\FlagOption.cs" />
+    <Compile Include="CommandFramework\NamedOption.cs" />
+    <Compile Include="CommandFramework\Option.cs" />
+    <Compile Include="CommandFramework\OptionParser.cs" />
+    <Compile Include="CommandFramework\OptionSet.cs" />
+    <Compile Include="CommandFramework\OptionsValidationException.cs" />
+    <Compile Include="CommandFramework\ParameterOption.cs" />
     <Compile Include="CommandHelpAttribute.cs" />
     <Compile Include="CompositeCommandMatcher.cs">
       <SubType>Code</SubType>
