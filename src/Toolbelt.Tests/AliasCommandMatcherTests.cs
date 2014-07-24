@@ -8,12 +8,12 @@ namespace Vtex.Toolbelt.Tests
     {
         class TryGetMatchedType
         {
-            [CommandHelp(Alias = "foo")]
+            [CommandHelp("some", "foo")]
             class SomeCommand
             {
             }
 
-            [CommandHelp(Alias = "bar")]
+            [CommandHelp("another", "bar")]
             class AnotherCommand
             {
             }
