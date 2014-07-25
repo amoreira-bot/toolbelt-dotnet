@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using SimpleInjector;
+using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt
 {
@@ -21,6 +22,7 @@ namespace Vtex.Toolbelt
             container.RegisterSingle<ICommandMatcher>(new CompositeCommandMatcher(typeNameMatcher, aliasMatcher));
 
             container.RegisterSingle<Configuration>(ReadConfiguration);
+            container.RegisterSingle<IFileSystem>(new PhysicalFileSystem());
         }
 
         private static Configuration ReadConfiguration()

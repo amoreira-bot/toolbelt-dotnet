@@ -75,6 +75,9 @@
     <Compile Include="CommandFramework\OptionsValidationException.cs" />
     <Compile Include="CommandFramework\ParameterOption.cs" />
     <Compile Include="CommandHelpAttribute.cs" />
+    <Compile Include="Commands\SyncWorkspaceCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CompositeCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -89,8 +92,17 @@
     </Compile>
     <Compile Include="IConsole.cs" />
     <Compile Include="ColoredConsole.cs" />
+    <Compile Include="PackageJson.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\PhysicalFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Services\Watcher.cs" />
     <Compile Include="Services\AuthenticationException.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
@@ -103,6 +115,9 @@
     <Compile Include="Services\Credential.cs" />
     <Compile Include="Services\CredentialStore.cs" />
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\WatcherFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TypeNameCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
