@@ -52,6 +52,10 @@
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
     <Compile Include="MockExtensions\MoqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\DebouncerTests.cs" />
+    <Compile Include="Services\GalleryClientTests.cs" />
+    <Compile Include="Services\TestableWatcher.cs" />
+    <Compile Include="Services\WatcherTests.cs" />
     <Compile Include="TypeNameCommandMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
