@@ -1,6 +1,6 @@
 using System;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.CommandFramework
 {
     public class CommandHelpAttribute : Attribute
     {

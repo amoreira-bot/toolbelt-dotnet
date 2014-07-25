@@ -1,5 +1,6 @@
 ﻿using System;
 using SimpleInjector;
+using Vtex.Toolbelt.CommandFramework;
 
 namespace Vtex.Toolbelt
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.CommandFramework
 {
     public class TypeNameCommandMatcher : ICommandMatcher
     {

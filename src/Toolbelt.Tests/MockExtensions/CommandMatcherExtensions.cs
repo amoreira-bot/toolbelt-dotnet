@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using Vtex.Toolbelt.CommandFramework;
 
 namespace Vtex.Toolbelt.Tests.MockExtensions
 {

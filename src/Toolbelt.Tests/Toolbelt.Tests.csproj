@@ -45,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AliasCommandMatcherTests.cs" />
-    <Compile Include="CommandDispatcherTests.cs" />
+    <Compile Include="CommandFramework\AliasCommandMatcherTests.cs" />
+    <Compile Include="CommandFramework\CommandDispatcherTests.cs" />
     <Compile Include="CommandFramework\OptionSetTests.cs" />
     <Compile Include="ConfigurationReaderTests.cs" />
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="Services\GalleryClientTests.cs" />
     <Compile Include="Services\TestableWatcher.cs" />
     <Compile Include="Services\WatcherTests.cs" />
-    <Compile Include="TypeNameCommandMatcherTests.cs" />
+    <Compile Include="CommandFramework\TypeNameCommandMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -61,11 +61,11 @@
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>Properties\ProductAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AliasCommandMatcher.cs" />
-    <Compile Include="Command.cs">
+    <Compile Include="CommandFramework\AliasCommandMatcher.cs" />
+    <Compile Include="CommandFramework\Command.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommandDispatcher.cs" />
+    <Compile Include="CommandFramework\CommandDispatcher.cs" />
     <Compile Include="CommandFramework\OptionSyntaxException.cs" />
     <Compile Include="CommandFramework\FlagOption.cs" />
     <Compile Include="CommandFramework\NamedOption.cs" />
@@ -74,20 +74,20 @@
     <Compile Include="CommandFramework\OptionSet.cs" />
     <Compile Include="CommandFramework\OptionsValidationException.cs" />
     <Compile Include="CommandFramework\ParameterOption.cs" />
-    <Compile Include="CommandHelpAttribute.cs" />
+    <Compile Include="CommandFramework\CommandHelpAttribute.cs" />
     <Compile Include="Commands\SyncWorkspaceCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompositeCommandMatcher.cs">
+    <Compile Include="CommandFramework\CompositeCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationException.cs" />
     <Compile Include="ConfigurationReader.cs" />
     <Compile Include="DefaultServices.cs" />
-    <Compile Include="DispatchException.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandMatcher.cs">
+    <Compile Include="CommandFramework\DispatchException.cs" />
+    <Compile Include="CommandFramework\ICommand.cs" />
+    <Compile Include="CommandFramework\ICommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IConsole.cs" />
@@ -118,7 +118,7 @@
     <Compile Include="Services\WatcherFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TypeNameCommandMatcher.cs">
+    <Compile Include="CommandFramework\TypeNameCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

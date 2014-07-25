@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using SimpleInjector;
+using Vtex.Toolbelt.CommandFramework;
 using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt

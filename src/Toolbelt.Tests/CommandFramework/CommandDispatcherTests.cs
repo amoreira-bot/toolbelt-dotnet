@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using Vtex.Toolbelt.CommandFramework;
 using Vtex.Toolbelt.Tests.MockExtensions;
 
 namespace Vtex.Toolbelt.Tests

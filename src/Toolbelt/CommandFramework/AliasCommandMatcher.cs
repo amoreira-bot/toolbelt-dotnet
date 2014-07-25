@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.CommandFramework
 {
     public class AliasCommandMatcher : ICommandMatcher
     {

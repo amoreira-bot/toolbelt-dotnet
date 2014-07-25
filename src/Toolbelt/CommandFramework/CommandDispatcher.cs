@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.CommandFramework
 {
     public class CommandDispatcher
     {

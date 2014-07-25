@@ -1,4 +1,4 @@
-﻿namespace Vtex.Toolbelt
+﻿namespace Vtex.Toolbelt.CommandFramework
 {
     public interface ICommand
     {

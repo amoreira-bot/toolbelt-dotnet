@@ -1,7 +1,6 @@
 ﻿using System.Linq;
-using Vtex.Toolbelt.CommandFramework;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.CommandFramework
 {
     public abstract class Command : ICommand
     {
