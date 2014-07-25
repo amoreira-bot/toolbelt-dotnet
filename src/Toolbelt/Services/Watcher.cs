@@ -32,8 +32,6 @@ namespace Vtex.Toolbelt.Services
 
         public event Action<IEnumerable<Change>> ChangesSent;
 
-        public event Action<Exception> FileSystemError;
-
         public void Start()
         {
             if (fileSystemWatcher == null)
@@ -70,7 +68,7 @@ namespace Vtex.Toolbelt.Services
                 this.OnCreated(args.FullPath);
             };
 
-            watcher.Error += (sender, args) => this.FileSystemError(args.GetException());
+            watcher.Error += (sender, args) => { throw args.GetException(); };
             return watcher;
         }
 

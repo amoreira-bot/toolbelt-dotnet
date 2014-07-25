@@ -40,7 +40,6 @@ namespace Vtex.Toolbelt.Commands
 
             var watcher = _watcherFactory.CreateAccountWatcher(package.Name, _workspace, credential.Token);
             watcher.ChangesSent += ChangesSent;
-            watcher.FileSystemError += exception => { throw new ApplicationException(exception.Message, exception); };
 
             Console.WriteLine();
             Console.WriteLine("uploading current workspace state...");
