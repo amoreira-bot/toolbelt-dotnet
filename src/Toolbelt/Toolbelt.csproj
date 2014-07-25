@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="IConsole.cs" />
     <Compile Include="ColoredConsole.cs" />
+    <Compile Include="Model\ChangeQueue.cs" />
     <Compile Include="Model\PackageJson.cs">
       <SubType>Code</SubType>
     </Compile>

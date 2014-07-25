@@ -7,7 +7,7 @@ using Vtex.Toolbelt.Services;
 namespace Vtex.Toolbelt.Tests.Services
 {
     [TestFixture]
-    public class GalleryClientTests
+    public class ChangeCollectionTests
     {
         class SummarizeChanges
         {
@@ -15,14 +15,14 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Update_one_file()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Update, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result, Is.EquivalentTo(changes));
@@ -32,15 +32,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Update_same_file_twice()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Update, "a"),
                     new Change(ChangeAction.Update, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -53,14 +53,14 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Delete_one_file()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Delete, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result, Is.EquivalentTo(changes));
@@ -70,15 +70,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Delete_same_file_twice()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Delete, "a"),
                     new Change(ChangeAction.Delete, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -91,15 +91,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Update_a_file_then_delete_it()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Update, "a"),
                     new Change(ChangeAction.Delete, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -112,15 +112,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Delete_a_file_then_update_it()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Delete, "a"),
                     new Change(ChangeAction.Update, "a")
                 };
+                var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = queue.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -133,15 +133,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Deleting_a_folder_after_a_file_inside_it_changes_should_only_consider_the_deletion()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Update, "models\\product.json"),
                     new Change(ChangeAction.Delete, "models")
                 };
+                var client = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = client.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -154,15 +154,15 @@ namespace Vtex.Toolbelt.Tests.Services
             public void Updating_a_file_inside_a_folder_that_was_deleted_should_send_both()
             {
                 // Arrange
-                var client = new TestableGalleryClient("");
                 var changes = new[]
                 {
                     new Change(ChangeAction.Delete, "models"),
                     new Change(ChangeAction.Update, "models\\product.json")
                 };
+                var client = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.PubliclySummarizeChanges(changes);
+                var result = client.Summarize("");
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
@@ -174,19 +174,15 @@ namespace Vtex.Toolbelt.Tests.Services
         }
     }
 
-    public class TestableGalleryClient : GalleryClient
+    public class TestableChangeQueue : ChangeQueue
     {
-        public TestableGalleryClient(string rootPath)
-            : base(null, null, rootPath, null, "http://something.com/")
+        public TestableChangeQueue(IEnumerable<Change> changes)
         {
+            foreach (var change in changes)
+                Enqueue(change);
         }
 
-        public IEnumerable<Change> PubliclySummarizeChanges(IEnumerable<Change> changes)
-        {
-            return this.SummarizeChanges(changes);
-        }
-
-        protected override string NormalizePath(string path)
+        protected override string NormalizePath(string path, string rootPath)
         {
             return path;
         }

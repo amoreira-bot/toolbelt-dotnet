@@ -13,7 +13,7 @@ namespace Vtex.Toolbelt.Services
         private readonly Debouncer _debouncer;
         private FileSystemWatcher _fileSystemWatcher;
 
-        protected readonly List<Change> Changes = new List<Change>();
+        protected readonly ChangeQueue Changes = new ChangeQueue();
 
         protected Watcher(string rootPath, Configuration configuration)
         {
@@ -90,13 +90,13 @@ namespace Vtex.Toolbelt.Services
 
         protected virtual void UpdatePath(string path)
         {
-            this.Changes.Add(new Change(ChangeAction.Update, path));
+            this.Changes.Enqueue(new Change(ChangeAction.Update, path));
             this.Debounce();
         }
 
         protected virtual void DeletePath(string path)
         {
-            this.Changes.Add(new Change(ChangeAction.Delete, path));
+            this.Changes.Enqueue(new Change(ChangeAction.Delete, path));
             this.Debounce();
         }
 
@@ -104,8 +104,9 @@ namespace Vtex.Toolbelt.Services
         {
             _debouncer.Debounce(() =>
             {
-                SendChanges(this.Changes, false);
+                var changes = this.Changes.Summarize(_rootPath);
                 this.Changes.Clear();
+                SendChanges(changes, false);
             });
         }
 
