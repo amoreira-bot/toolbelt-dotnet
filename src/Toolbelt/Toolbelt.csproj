@@ -78,6 +78,9 @@
     <Compile Include="CompositeCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationException.cs" />
+    <Compile Include="ConfigurationReader.cs" />
     <Compile Include="DefaultServices.cs" />
     <Compile Include="DispatchException.cs" />
     <Compile Include="ICommand.cs" />

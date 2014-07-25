@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using SimpleInjector;
@@ -18,6 +19,20 @@ namespace Vtex.Toolbelt
             var typeNameMatcher = new TypeNameCommandMatcher(commandTypes);
             var aliasMatcher = new AliasCommandMatcher(commandTypes);
             container.RegisterSingle<ICommandMatcher>(new CompositeCommandMatcher(typeNameMatcher, aliasMatcher));
+
+            container.RegisterSingle<Configuration>(ReadConfiguration);
+        }
+
+        private static Configuration ReadConfiguration()
+        {
+            var home = Environment.OSVersion.Platform == PlatformID.MacOSX ||
+                       Environment.OSVersion.Platform == PlatformID.Unix
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+
+            var configFilePath = Path.Combine(home, ".vtexrc");
+            var configurationReader = new ConfigurationReader(configFilePath);
+            return configurationReader.ReadConfiguration();
         }
     }
 }
