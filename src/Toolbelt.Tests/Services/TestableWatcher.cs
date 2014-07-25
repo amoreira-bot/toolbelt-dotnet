@@ -17,7 +17,7 @@ namespace Vtex.Toolbelt.Tests.Services
         }
 
         public TestableWatcher()
-            : base(null, null, null, null, new Configuration())
+            : base(null, new Configuration())
         {
             this.UpdatedPaths = new List<string>();
             this.DeletedPaths = new List<string>();
@@ -46,6 +46,11 @@ namespace Vtex.Toolbelt.Tests.Services
         public void PubliclyDeletePath(string path)
         {
             base.DeletePath(path);
+        }
+
+        protected override void SendChanges(IEnumerable<Change> changes, bool resync)
+        {
+            throw new System.NotImplementedException();
         }
 
         protected override void UpdatePath(string path)

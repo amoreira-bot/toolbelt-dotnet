@@ -11,9 +11,9 @@
             this._fileSystem = fileSystem;
         }
 
-        public Watcher CreateAccountWatcher(string accountName, string workspace, string authenticationToken)
+        public AccountWatcher CreateAccountWatcher(string accountName, string workspace, string authenticationToken)
         {
-            return new Watcher(accountName, workspace, _fileSystem.CurrentDirectory, authenticationToken,
+            return new AccountWatcher(accountName, workspace, _fileSystem.CurrentDirectory, authenticationToken,
                 _configuration);
         }
     }

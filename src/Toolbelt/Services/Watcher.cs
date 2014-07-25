@@ -7,56 +7,46 @@ using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
 {
-    public class Watcher
+    public abstract class Watcher
     {
-        private readonly string accountName;
-        private readonly string workspaceName;
-        private readonly string rootPath;
-        private readonly Debouncer debouncer;
-        private readonly GalleryClient galleryClient;
-
-        private FileSystemWatcher fileSystemWatcher;
+        private readonly string _rootPath;
+        private readonly Debouncer _debouncer;
+        private FileSystemWatcher _fileSystemWatcher;
 
         protected readonly List<Change> Changes = new List<Change>();
 
-        public Watcher(string accountName, string workspaceName, string rootPath, string authenticationToken,
-            Configuration configuration)
+        protected Watcher(string rootPath, Configuration configuration)
         {
-            this.accountName = accountName;
-            this.workspaceName = workspaceName;
-            this.rootPath = rootPath;
-            this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(configuration.FileSystemDelay));
-            this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath, authenticationToken,
-                configuration.GalleryEndpoint);
+            _rootPath = rootPath;
+            _debouncer = new Debouncer(TimeSpan.FromMilliseconds(configuration.FileSystemDelay));
         }
-
-        public event Action<IEnumerable<Change>> ChangesSent;
 
         public void Start()
         {
-            if (fileSystemWatcher == null)
-                fileSystemWatcher = CreateFileSystemWatcher();
+            if (_fileSystemWatcher == null)
+                _fileSystemWatcher = CreateFileSystemWatcher();
 
-            fileSystemWatcher.EnableRaisingEvents = true;
+            _fileSystemWatcher.EnableRaisingEvents = true;
         }
 
         public void Stop()
         {
-            if (fileSystemWatcher != null)
-                fileSystemWatcher.EnableRaisingEvents = false;
+            if (_fileSystemWatcher != null)
+                _fileSystemWatcher.EnableRaisingEvents = false;
         }
 
         public void Resync()
         {
-            var changes = this.ListFilesInFolder(this.rootPath)
+            var changes = this.ListFilesInFolder(_rootPath)
                 .Select(path => new Change(ChangeAction.Update, path));
-            var sentChanges = this.galleryClient.SendChanges(changes.ToArray(), true);
-            this.ChangesSent(sentChanges);
+            SendChanges(changes.ToArray(), true);
         }
+
+        protected abstract void SendChanges(IEnumerable<Change> changes, bool resync);
 
         private FileSystemWatcher CreateFileSystemWatcher()
         {
-            var watcher = new FileSystemWatcher(this.rootPath);
+            var watcher = new FileSystemWatcher(_rootPath);
             watcher.IncludeSubdirectories = true;
 
             watcher.Created += (sender, args) => this.OnCreated(args.FullPath);
@@ -71,7 +61,6 @@ namespace Vtex.Toolbelt.Services
             watcher.Error += (sender, args) => { throw args.GetException(); };
             return watcher;
         }
-
         protected void OnCreated(string path)
         {
             if (this.IsFolder(path))
@@ -113,11 +102,10 @@ namespace Vtex.Toolbelt.Services
 
         protected virtual void Debounce()
         {
-            this.debouncer.Debounce(() =>
+            _debouncer.Debounce(() =>
             {
-                var sentChanges = this.galleryClient.SendChanges(this.Changes.ToArray());
+                SendChanges(this.Changes, false);
                 this.Changes.Clear();
-                this.ChangesSent(sentChanges);
             });
         }
 
