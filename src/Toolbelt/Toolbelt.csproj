@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ApiException.cs" />
     <Compile Include="Services\IFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>

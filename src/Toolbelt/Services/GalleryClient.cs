@@ -30,8 +30,6 @@ namespace Vtex.Toolbelt.Services
                 authenticationToken);
         }
 
-        public event Action<RequestFailedArgs> RequestFailed;
-
         public IEnumerable<Change> SendChanges(Change[] changes, bool resync = false)
         {
             var result = SummarizeChanges(changes).ToArray();
@@ -98,21 +96,9 @@ namespace Vtex.Toolbelt.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                var args = new RequestFailedArgs(response.StatusCode.ToString(), (int) response.StatusCode);
-                this.RequestFailed(args);
+                throw new ApiException(string.Format("Failed to send changes with status code {0} ({1})",
+                    (int) response.StatusCode, response.StatusCode), response);
             }
-        }
-    }
-
-    public class RequestFailedArgs
-    {
-        public string StatusCodeText { get; private set; }
-        public int StatusCode { get; private set; }
-
-        public RequestFailedArgs(string statusCodeText, int statusCode)
-        {
-            StatusCodeText = statusCodeText;
-            StatusCode = statusCode;
         }
     }
 }

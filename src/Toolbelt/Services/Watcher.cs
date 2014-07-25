@@ -28,12 +28,9 @@ namespace Vtex.Toolbelt.Services
             this.debouncer = new Debouncer(TimeSpan.FromMilliseconds(configuration.FileSystemDelay));
             this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath, authenticationToken,
                 configuration.GalleryEndpoint);
-            this.galleryClient.RequestFailed += args => this.RequestFailed(args);
         }
 
         public event Action<IEnumerable<Change>> ChangesSent;
-
-        public event Action<RequestFailedArgs> RequestFailed;
 
         public event Action<Exception> FileSystemError;
 

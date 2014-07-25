@@ -40,7 +40,6 @@ namespace Vtex.Toolbelt.Commands
 
             var watcher = _watcherFactory.CreateAccountWatcher(package.Name, _workspace, credential.Token);
             watcher.ChangesSent += ChangesSent;
-            watcher.RequestFailed += RequestFailed;
             watcher.FileSystemError += exception => { throw new ApplicationException(exception.Message, exception); };
 
             Console.WriteLine();
@@ -76,12 +75,6 @@ namespace Vtex.Toolbelt.Commands
                     change.Action.ToString().ToUpper(), change.Path);
             }
             Console.WriteLine("waiting for changes...");
-        }
-
-        public void RequestFailed(RequestFailedArgs args)
-        {
-            throw new ApplicationException(string.Format("Request failed with status code {0} ({1})",
-                args.StatusCodeText, args.StatusCode));
         }
     }
 }
