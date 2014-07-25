@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Tests.Services

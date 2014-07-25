@@ -1,6 +1,6 @@
 using System;
 
-namespace Vtex.Toolbelt
+namespace Vtex.Toolbelt.Model
 {
     public class PackageJson
     {

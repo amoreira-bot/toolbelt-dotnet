@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Vtex.Toolbelt.CommandFramework;
+using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Commands

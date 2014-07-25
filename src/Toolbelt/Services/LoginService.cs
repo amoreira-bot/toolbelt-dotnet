@@ -1,4 +1,5 @@
 ﻿using System;
+using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
 {

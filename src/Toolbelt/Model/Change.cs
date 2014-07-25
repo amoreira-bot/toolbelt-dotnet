@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vtex.Toolbelt.Services
+namespace Vtex.Toolbelt.Model
 {
     public class Change : IEquatable<Change>
     {

@@ -1,4 +1,4 @@
-﻿namespace Vtex.Toolbelt.Services
+﻿namespace Vtex.Toolbelt.Model
 {
     public enum ChangeAction
     {

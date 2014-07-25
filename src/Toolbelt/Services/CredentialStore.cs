@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
 {
