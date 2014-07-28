@@ -9,6 +9,11 @@ namespace Vtex.Toolbelt.CommandFramework
     {
         private readonly IEnumerable<Type> _candidateTypes;
 
+        public IEnumerable<Type> CommandTypes
+        {
+            get { return Enumerable.Empty<Type>(); }
+        }
+
         public AliasCommandMatcher(IEnumerable<Type> candidateTypes)
         {
             _candidateTypes = candidateTypes;

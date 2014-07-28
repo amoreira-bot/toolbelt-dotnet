@@ -8,6 +8,11 @@ namespace Vtex.Toolbelt.CommandFramework
     {
         private readonly IEnumerable<Type> _candidateTypes;
 
+        public IEnumerable<Type> CommandTypes
+        {
+            get { return _candidateTypes; }
+        }
+
         public TypeNameCommandMatcher(IEnumerable<Type> candidateTypes)
         {
             _candidateTypes = candidateTypes;

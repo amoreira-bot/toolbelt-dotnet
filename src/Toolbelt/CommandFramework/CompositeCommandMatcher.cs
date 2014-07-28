@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Vtex.Toolbelt.CommandFramework
 {
@@ -6,6 +8,11 @@ namespace Vtex.Toolbelt.CommandFramework
     {
         private readonly ICommandMatcher _firstMatcher;
         private readonly ICommandMatcher _secondMatcher;
+
+        public IEnumerable<Type> CommandTypes
+        {
+            get { return _firstMatcher.CommandTypes.Union(_secondMatcher.CommandTypes).Distinct(); }
+        }
 
         public CompositeCommandMatcher(ICommandMatcher firstMatcher, ICommandMatcher secondMatcher)
         {

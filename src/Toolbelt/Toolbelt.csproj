@@ -75,6 +75,7 @@
     <Compile Include="CommandFramework\OptionsValidationException.cs" />
     <Compile Include="CommandFramework\ParameterOption.cs" />
     <Compile Include="CommandFramework\CommandHelpAttribute.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\SyncWorkspaceCommand.cs">
       <SubType>Code</SubType>
     </Compile>
