@@ -48,6 +48,7 @@
     <Compile Include="CommandFramework\AliasCommandMatcherTests.cs" />
     <Compile Include="CommandFramework\CommandDispatcherTests.cs" />
     <Compile Include="CommandFramework\OptionSetTests.cs" />
+    <Compile Include="Commands\SyncWorkspaceCommandTests.cs" />
     <Compile Include="ConfigurationReaderTests.cs" />
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
     <Compile Include="MockExtensions\MoqExtensions.cs" />

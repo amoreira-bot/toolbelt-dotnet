@@ -5,7 +5,7 @@ namespace Vtex.Toolbelt.CommandFramework
     public abstract class Command : ICommand
     {
         protected readonly IConsole Console;
-        protected readonly OptionSet OptionSet = new OptionSet();
+        public readonly OptionSet OptionSet = new OptionSet();
         private bool _helpCommand;
 
         protected Command(IConsole console)
