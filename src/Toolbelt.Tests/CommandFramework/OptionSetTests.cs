@@ -449,7 +449,7 @@ namespace Vtex.Toolbelt.Tests.CommandFramework
 
                 // Assert
                 Assert.That(writer.ToString().TrimEnd(),
-                    Is.EqualTo("    -f, --foo <value>     required - foos all things"));
+                    Is.EqualTo("    -f, --foo <value>     (required) foos all things"));
             }
         }
     }

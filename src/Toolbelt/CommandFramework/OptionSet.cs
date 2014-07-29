@@ -109,7 +109,7 @@ namespace Vtex.Toolbelt.CommandFramework
                     ? string.Format("-{0}, --{1}", option.Shorthand, option.Name)
                     : string.Format("-{0}, --{1} <value>", option.Shorthand, option.Name);
 
-                var description = option.Required ? "required - " + option.Description : option.Description;
+                var description = option.Required ? "(required) " + option.Description : option.Description;
 
                 if (usage.Length < 22)
                 {
