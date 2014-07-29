@@ -46,8 +46,12 @@ namespace Vtex.Toolbelt.Services
 
         private FileSystemWatcher CreateFileSystemWatcher()
         {
-            var watcher = new FileSystemWatcher(_rootPath);
-            watcher.IncludeSubdirectories = true;
+            var watcher = new FileSystemWatcher(_rootPath)
+            {
+                IncludeSubdirectories = true,
+                NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite |
+                    NotifyFilters.FileName | NotifyFilters.DirectoryName,
+            };
 
             watcher.Created += (sender, args) => this.OnCreated(args.FullPath);
             watcher.Changed += (sender, args) => this.OnChanged(args.FullPath);
