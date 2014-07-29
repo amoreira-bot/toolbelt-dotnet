@@ -23,7 +23,7 @@ namespace Vtex.Toolbelt.Services
 
         public event Action<IEnumerable<Change>> ChangesSent;
 
-        protected override void SendChanges(IEnumerable<Change> changes, bool resync)
+        protected override void SendChanges(IList<Change> changes, bool resync)
         {
             this.galleryClient.SendChanges(changes, resync);
             this.ChangesSent(changes);

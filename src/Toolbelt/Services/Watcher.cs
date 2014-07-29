@@ -44,7 +44,7 @@ namespace Vtex.Toolbelt.Services
             SendChanges(summarizedChanges.ToArray(), true);
         }
 
-        protected abstract void SendChanges(IEnumerable<Change> changes, bool resync);
+        protected abstract void SendChanges(IList<Change> changes, bool resync);
 
         private FileSystemWatcher CreateFileSystemWatcher()
         {
@@ -112,7 +112,7 @@ namespace Vtex.Toolbelt.Services
             {
                 var changes = this.Changes.Summarize(_rootPath);
                 this.Changes.Clear();
-                SendChanges(changes, false);
+                SendChanges(changes.ToArray(), false);
             });
         }
 
