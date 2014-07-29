@@ -24,7 +24,7 @@ namespace Vtex.Toolbelt.CommandFramework
                     string.Join(" ", args)));
             }
 
-            var command = (ICommand)_services.GetService(commandType);
+            var command = this.CreateCommand(commandType);
             var commandArgs = args.Skip(usedArgCount).ToArray();
             try
             {
@@ -34,6 +34,11 @@ namespace Vtex.Toolbelt.CommandFramework
             {
                 throw new DispatchException(exception.Message);
             }
+        }
+
+        protected virtual ICommand CreateCommand(Type commandType)
+        {
+            return (ICommand) _services.GetService(commandType);
         }
     }
 }

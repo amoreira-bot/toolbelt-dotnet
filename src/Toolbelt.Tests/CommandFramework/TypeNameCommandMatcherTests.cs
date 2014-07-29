@@ -80,12 +80,12 @@ namespace Vtex.Toolbelt.Tests
                 int usedArgCount;
 
                 // Act
-                var success = matcher.TryGetMatchedType(new[] {"help"}, out commandType, out usedArgCount);
+                var success = matcher.TryGetMatchedType(new string[0], out commandType, out usedArgCount);
 
                 // Assert
                 Assert.That(success, Is.True);
                 Assert.That(commandType, Is.EqualTo(typeof(HelpCommand)));
-                Assert.That(usedArgCount, Is.EqualTo(1));
+                Assert.That(usedArgCount, Is.EqualTo(0));
             }
         }
     }

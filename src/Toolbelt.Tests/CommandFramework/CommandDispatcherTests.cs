@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Vtex.Toolbelt.CommandFramework;
@@ -15,7 +16,7 @@ namespace Vtex.Toolbelt.Tests
             public void Throws_exception_when_command_isnt_found()
             {
                 // Arrange
-                var dispatcher = new CommandDispatcher(Mock.Of<ICommandMatcher>(), null);
+                var dispatcher = new TestableCommandDispatcher(Mock.Of<ICommandMatcher>());
 
                 // Act & Assert
                 Assert.That(() => dispatcher.Dispatch(new[] {"foo"}),
@@ -29,12 +30,11 @@ namespace Vtex.Toolbelt.Tests
                 var command = Mock.Of<ICommand>();
                 command.Setup(c => c.Execute("", new[] {"foo"})).Throws<InvalidOperationException>();
 
-                var services = Mock.Of<IServiceProvider>(s => s.GetService(command.GetType()) == command);
-
                 var commandMatcher = Mock.Of<ICommandMatcher>()
                     .ThatMatches(new[] {"foo"}, command.GetType(), 0);
 
-                var dispatcher = new CommandDispatcher(commandMatcher, services);
+                var dispatcher = new TestableCommandDispatcher(commandMatcher)
+                    .WithCommand(command);
 
                 // Act & Assert
                 Assert.That(() => dispatcher.Dispatch(new[] { "foo" }),
@@ -46,18 +46,38 @@ namespace Vtex.Toolbelt.Tests
             {
                 // Arrange
                 var command = Mock.Of<ICommand>();
-                var services = Mock.Of<IServiceProvider>(s => s.GetService(command.GetType()) == command);
-
                 var commandMatcher = Mock.Of<ICommandMatcher>()
                     .ThatMatches(new[] {"do", "some", "thing"}, command.GetType(), 2);
 
-                var dispatcher = new CommandDispatcher(commandMatcher, services);
+                var dispatcher = new TestableCommandDispatcher(commandMatcher)
+                    .WithCommand(command);
 
                 // Act
                 dispatcher.Dispatch(new[] {"do", "some", "thing"});
 
                 // Verify
                 Mock.Get(command).Verify(c => c.Execute("do some", new[] {"thing"}));
+            }
+
+            public class TestableCommandDispatcher : CommandDispatcher
+            {
+                private readonly Dictionary<Type, ICommand> _commandsMock = new Dictionary<Type, ICommand>();
+
+                public TestableCommandDispatcher(ICommandMatcher commandMatcher)
+                    : base(commandMatcher, null)
+                {
+                }
+
+                protected override ICommand CreateCommand(Type commandType)
+                {
+                    return _commandsMock[commandType];
+                }
+
+                public TestableCommandDispatcher WithCommand(ICommand command)
+                {
+                    _commandsMock[command.GetType()] = command;
+                    return this;
+                }
             }
         }
     }
