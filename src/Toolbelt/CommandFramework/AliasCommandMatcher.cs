@@ -35,7 +35,7 @@ namespace Vtex.Toolbelt.CommandFramework
 
         private static string GetAlias(Type type)
         {
-            var helpAttribute = type.GetCustomAttribute<CommandHelpAttribute>(true);
+            var helpAttribute = type.GetCustomAttribute<AliasAttribute>(true);
             return helpAttribute == null || helpAttribute.Alias == null ? null : helpAttribute.Alias.ToLower();
         }
     }

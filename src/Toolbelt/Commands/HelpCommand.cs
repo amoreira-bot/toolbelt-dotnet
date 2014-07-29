@@ -6,7 +6,7 @@ using Vtex.Toolbelt.CommandFramework;
 
 namespace Vtex.Toolbelt.Commands
 {
-    [CommandHelp("display this help screen")]
+    [Description("display this help screen")]
     public class HelpCommand : Command
     {
         private readonly ICommandMatcher _commandMatcher;
@@ -30,17 +30,15 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine();
 
             Console.WriteLine("These are the available commands:");
-            var commands = _commandMatcher.CommandTypes.ToDictionary(GetCommandName,
-                t => t.GetCustomAttribute<CommandHelpAttribute>());
+            var commands = _commandMatcher.CommandTypes.Select(CommandHelp.FromType).ToArray();
 
-            var columnWidth = commands.Keys.Select(k => k.Length).Max() + 3;
-            foreach (var command in commands.OrderBy(c => c.Key))
+            var columnWidth = commands.Select(c => c.Name.Length).Max() + 3;
+            foreach (var command in commands.OrderBy(c => c.Name))
             {
-                Console.WriteLine("    [#white {0}]{1}",
-                    command.Key.PadRight(columnWidth),
-                    (string.IsNullOrWhiteSpace(command.Value.Alias)
-                        ? command.Value.Description
-                        : string.Format("([#white {0}]) {1}", command.Value.Alias, command.Value.Description)));
+                var description = command.Alias == null
+                    ? command.Description
+                    : string.Format("([#white {0}]) {1}", command.Alias, command.Description);
+                Console.WriteLine("    [#white {0}]{1}", command.Name.PadRight(columnWidth), description);
             }
 
             Console.WriteLine();
@@ -48,12 +46,32 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine();
         }
 
-        private static string GetCommandName(Type type)
+        private class CommandHelp
         {
-            var parts = Regex.Replace(type.Name, "([A-Z])", "_$1").ToLower()
-                .Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries)
-                .Reverse().Skip(1);
-            return string.Join(" ", parts);
+            public string Name { get; private set; }
+            public string Description { get; private set; }
+            public string Alias { get; private set; }
+
+            public static CommandHelp FromType(Type commandType)
+            {
+                var descriptionAttribute = commandType.GetCustomAttribute<DescriptionAttribute>();
+                var aliasAttribute = commandType.GetCustomAttribute<AliasAttribute>();
+
+                return new CommandHelp
+                {
+                    Name = GetCommandName(commandType),
+                    Description = descriptionAttribute != null ? descriptionAttribute.Description : string.Empty,
+                    Alias = aliasAttribute != null ? aliasAttribute.Alias : null
+                };
+            }
+
+            private static string GetCommandName(Type type)
+            {
+                var parts = Regex.Replace(type.Name, "([A-Z])", "_$1").ToLower()
+                    .Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Reverse().Skip(1);
+                return string.Join(" ", parts);
+            }
         }
     }
 }

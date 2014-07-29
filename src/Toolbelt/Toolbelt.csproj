@@ -61,6 +61,7 @@
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>Properties\ProductAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CommandFramework\AliasAttribute.cs" />
     <Compile Include="CommandFramework\AliasCommandMatcher.cs" />
     <Compile Include="CommandFramework\Command.cs">
       <SubType>Code</SubType>
@@ -74,7 +75,7 @@
     <Compile Include="CommandFramework\OptionSet.cs" />
     <Compile Include="CommandFramework\OptionsValidationException.cs" />
     <Compile Include="CommandFramework\ParameterOption.cs" />
-    <Compile Include="CommandFramework\CommandHelpAttribute.cs" />
+    <Compile Include="CommandFramework\DescriptionAttribute.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\SyncWorkspaceCommand.cs">
       <SubType>Code</SubType>

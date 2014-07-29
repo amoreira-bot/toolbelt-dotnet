@@ -8,7 +8,7 @@ using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Commands
 {
-    [CommandHelp("watch and synchronize folder with workspace", "sync")]
+    [Description("watch and synchronize folder with workspace"), Alias("sync")]
     public class SyncWorkspaceCommand : Command
     {
         private readonly IFileSystem _fileSystem;

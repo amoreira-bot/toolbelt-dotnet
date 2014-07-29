@@ -29,7 +29,7 @@ namespace Vtex.Toolbelt.CommandFramework
 
         private void WriteUsage(string invokedWith)
         {
-            var commandHelp = this.GetType().GetCustomAttributes(true).OfType<CommandHelpAttribute>().Single();
+            var commandHelp = this.GetType().GetCustomAttributes(true).OfType<DescriptionAttribute>().Single();
             var writer = Console.Out;
 
             writer.WriteLine("usage: vtex {0} {1} [options]", invokedWith, OptionSet.GetParametersUsage());
