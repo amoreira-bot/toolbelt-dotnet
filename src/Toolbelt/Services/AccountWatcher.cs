@@ -21,12 +21,10 @@ namespace Vtex.Toolbelt.Services
                 configuration.GalleryEndpoint);
         }
 
-        public event Action<IEnumerable<Change>> ChangesSent;
-
         protected override void SendChanges(IList<Change> changes, bool resync)
         {
             this.galleryClient.SendChanges(changes, resync);
-            this.ChangesSent(changes);
+            base.SendChanges(changes, resync);
         }
     }
 }
