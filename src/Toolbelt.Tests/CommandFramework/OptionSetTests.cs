@@ -158,12 +158,12 @@ namespace Vtex.Toolbelt.Tests.CommandFramework
                 var useLocal = false;
                 string accountName = null, workspace = null, configPath = null;
                 var options = new OptionSet
-            {
-                {0, "account", "Account name", value => accountName = value},
-                {1, "workspace", "Workspace name", value => workspace = value},
-                {"local", 'l', "Use local storage", () => useLocal = true},
-                {"config", 'c', "Configuration file path", value => configPath = value}
-            };
+                {
+                    {0, "account", "Account name", value => accountName = value},
+                    {1, "workspace", "Workspace name", value => workspace = value},
+                    {"local", 'l', "Use local storage", () => useLocal = true},
+                    {"config", 'c', "Configuration file path", value => configPath = value}
+                };
 
                 // Act
                 var args = rawArgs.Split(' ');
