@@ -45,7 +45,7 @@ if ($env:APPVEYOR) {
 # Create zip file
 $buildPath = '.\build'
 $artifactsPath = '.\artifacts'
-$releasePath = '.\src\Cli\bin\Release'
+$releasePath = '.\src\Toolbelt\bin\Release'
 
 EnsureEmptyFolder $buildPath
 EnsureEmptyFolder $artifactsPath

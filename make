@@ -4,7 +4,7 @@ SOLUTION_FILE="src/Toolbelt.sln"
 MSBUILD_PATH="C:/Windows/Microsoft.NET/Framework64/v4.0.30319/MSBuild.exe"
 NUGET_PATH="tools/nuget/nuget.exe"
 NUNIT_PATH="src/Packages/NUnit.Runners.2.6.3/tools/nunit-console.exe"
-TEST_ASSEMBLIES=("src/Tests/bin/Release/Vtex.Toolbelt.Tests.dll")
+TEST_ASSEMBLIES=("src/Toolbelt.Tests/bin/Release/Vtex.Toolbelt.Tests.dll")
 
 # Default
 if [ "$1" == "" ] || [ "$1" == "all" ]; then
