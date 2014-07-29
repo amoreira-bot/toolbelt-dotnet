@@ -7,7 +7,7 @@ using Vtex.Toolbelt.Services;
 namespace Vtex.Toolbelt.Tests.Services
 {
     [TestFixture]
-    public class ChangeCollectionTests
+    public class ChangeQueueTests
     {
         class SummarizeChanges
         {

@@ -20,7 +20,7 @@ namespace Vtex.Toolbelt.Tests
             }
 
             [Test]
-            public void Fails_when_alias_canot_be_found()
+            public void Fails_when_alias_cannot_be_found()
             {
                 // Arrange
                 var matcher = new AliasCommandMatcher(new Type[] {});

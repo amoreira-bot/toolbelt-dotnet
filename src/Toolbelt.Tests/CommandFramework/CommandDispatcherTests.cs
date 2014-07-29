@@ -42,7 +42,7 @@ namespace Vtex.Toolbelt.Tests
             }
 
             [Test]
-            public void Excecutes_command_with_correct_arguments()
+            public void Executes_command_with_correct_arguments()
             {
                 // Arrange
                 var command = Mock.Of<ICommand>();

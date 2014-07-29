@@ -54,7 +54,7 @@
     <Compile Include="MockExtensions\MoqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DebouncerTests.cs" />
-    <Compile Include="Services\ChangeCollectionTests.cs" />
+    <Compile Include="Services\ChangeQueueTests.cs" />
     <Compile Include="Services\TestableWatcher.cs" />
     <Compile Include="Services\WatcherTests.cs" />
     <Compile Include="CommandFramework\TypeNameCommandMatcherTests.cs" />
