@@ -30,7 +30,7 @@ namespace Vtex.Toolbelt.Commands
 
         protected override void InnerExecute()
         {
-            var package = this.ReadPackageJson();
+            var package = PackageJson.In(_fileSystem);
             package.Validate();
 
             var credential = _login.GetValidCredential();
@@ -51,19 +51,6 @@ namespace Vtex.Toolbelt.Commands
             watcher.Start();
 
             while (true) ;
-        }
-
-        private PackageJson ReadPackageJson()
-        {
-            try
-            {
-                var json = _fileSystem.ReadTextFile("package.json");
-                return JsonConvert.DeserializeObject<PackageJson>(json);
-            }
-            catch (FileNotFoundException)
-            {
-                throw new ApplicationException("Couldn't find package.json file.");
-            }
         }
 
         public void ChangesSent(IEnumerable<Change> changes)
