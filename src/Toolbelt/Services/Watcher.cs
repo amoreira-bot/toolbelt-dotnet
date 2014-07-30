@@ -37,9 +37,11 @@ namespace Vtex.Toolbelt.Services
 
         public void Resync()
         {
-            var changes = this.ListFilesInFolder(_rootPath)
-                .Select(path => new Change(ChangeAction.Update, path));
-            SendChanges(changes.ToArray(), true);
+            var changes = this.ListFilesInFolder(_rootPath).Select(path => new Change(ChangeAction.Update, path));
+            var changeQueue = new ChangeQueue(changes);
+            var summarizedChanges = changeQueue.Summarize(_rootPath);
+
+            SendChanges(summarizedChanges.ToArray(), true);
         }
 
         protected abstract void SendChanges(IEnumerable<Change> changes, bool resync);

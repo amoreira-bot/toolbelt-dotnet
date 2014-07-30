@@ -6,6 +6,14 @@ namespace Vtex.Toolbelt.Model
 {
     public class ChangeQueue : Queue<Change>
     {
+        public ChangeQueue()
+        {
+        }
+
+        public ChangeQueue(IEnumerable<Change> changes) : base(changes)
+        {
+        }
+
         public IEnumerable<Change> Summarize(string rootPath)
         {
             var changes = this.Reverse();
