@@ -9,7 +9,7 @@ namespace Vtex.Toolbelt.Tests.Commands
         public void Should_have_valid_options()
         {
             // Arrange
-            var command = new SyncWorkspaceCommand(null, null, null, null, null);
+            var command = new SyncWorkspaceCommand(null, null, null, null);
 
             // Act & Assert
             Assert.That(() => command.OptionSet.Validate(), Throws.Nothing);
