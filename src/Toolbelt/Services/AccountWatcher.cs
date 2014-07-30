@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
 {
     public class AccountWatcher : Watcher
     {
-        private readonly string accountName;
-        private readonly string workspaceName;
-        private readonly GalleryClient galleryClient;
+        private readonly string _accountName;
+        private readonly string _workspace;
+        private readonly GalleryClient _galleryClient;
 
-        public AccountWatcher(string accountName, string workspaceName, string rootPath, string authenticationToken,
+        public AccountWatcher(string accountName, string workspace, string rootPath, string authenticationToken,
             Configuration configuration)
             : base(rootPath, configuration)
         {
-            this.accountName = accountName;
-            this.workspaceName = workspaceName;
-            this.galleryClient = new GalleryClient(accountName, workspaceName, rootPath, authenticationToken,
-                configuration.GalleryEndpoint);
+            _accountName = accountName;
+            _workspace = workspace;
+            _galleryClient = new GalleryClient(rootPath, authenticationToken, configuration.GalleryEndpoint);
         }
 
         protected override void SendChanges(IList<Change> changes, bool resync)
         {
-            this.galleryClient.SendChanges(changes, resync);
+            _galleryClient.SendWorkspaceChanges(_accountName, _workspace, changes, resync);
             base.SendChanges(changes, resync);
         }
     }
