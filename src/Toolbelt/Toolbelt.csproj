@@ -35,6 +35,9 @@
     <Reference Include="INIFileParser">
       <HintPath>..\packages\ini-parser.2.1.1\lib\INIFileParser.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -129,6 +132,7 @@
     <Compile Include="CommandFramework\TypeNameCommandMatcher.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PackageFiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
