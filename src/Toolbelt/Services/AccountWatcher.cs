@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services.Responses;
 
@@ -47,6 +46,14 @@ namespace Vtex.Toolbelt.Services
 
             foreach (var remote in remoteState)
                 yield return new FileConflict(remote.Key, null, remote.Value.Size);
+        }
+
+        public void ResolveWithRemote(ICollection<FileConflict> conflicts)
+        {
+        }
+
+        public void ResolveWithLocal(ICollection<FileConflict> conflicts)
+        {
         }
     }
 }

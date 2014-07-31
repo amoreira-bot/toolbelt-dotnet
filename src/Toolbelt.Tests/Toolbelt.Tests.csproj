@@ -52,6 +52,7 @@
     <Compile Include="ConfigurationReaderTests.cs" />
     <Compile Include="MockExtensions\CommandMatcherExtensions.cs" />
     <Compile Include="MockExtensions\MoqExtensions.cs" />
+    <Compile Include="Model\FileConflictTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DebouncerTests.cs" />
     <Compile Include="Services\ChangeQueueTests.cs" />
