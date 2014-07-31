@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Vtex.Toolbelt
@@ -113,6 +114,50 @@ namespace Vtex.Toolbelt
 
             Console.WriteLine();
             return password;
+        }
+
+        public char Prompt(string message, Action<PromptConfiguration> configure)
+        {
+            var prompt = new PromptConfiguration();
+            configure(prompt);
+
+            var optionsMessage = BuildOptionsLine(prompt);
+
+            while (true)
+            {
+                this.WriteLine(message);
+                this.Write(optionsMessage);
+                var key = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(key))
+                {
+                    var option = prompt.FirstOrDefault(o => o.IsDefault);
+                    if (option != null)
+                        return option.Key;
+                }
+                else if(key.Length == 1)
+                {
+                    var keyChar = char.ToUpperInvariant(key[0]);
+                    var option = prompt.FirstOrDefault(o => o.Key == keyChar);
+                    if (option != null)
+                        return option.Key;
+                }
+
+                Console.WriteLine("Invalid option.");
+                Console.WriteLine();
+            }
+        }
+
+        private static string BuildOptionsLine(PromptConfiguration prompt)
+        {
+            var optionsMessage = string.Join("  ", prompt.Select(option => option.IsDefault
+                ? string.Format("[#yellow [[{0}]] {1}]", option.Key, option.Description)
+                : string.Format("[[{0}]] {1}", option.Key, option.Description)));
+
+            var defaultOption = prompt.FirstOrDefault(option => option.IsDefault);
+            if (defaultOption != null)
+                optionsMessage += string.Format(" (default is \"{0}\")", defaultOption.Key);
+            optionsMessage += ": ";
+            return optionsMessage;
         }
     }
 }

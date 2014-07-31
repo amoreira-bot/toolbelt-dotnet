@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Vtex.Toolbelt
 {
@@ -19,5 +20,7 @@ namespace Vtex.Toolbelt
         string ReadLine(string message);
 
         string ReadPassword(string message);
+
+        char Prompt(string message, Action<PromptConfiguration> configure);
     }
 }
