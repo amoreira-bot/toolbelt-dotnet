@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Vtex.Toolbelt.Model;
+using Vtex.Toolbelt.Services.Requests;
+using Vtex.Toolbelt.Services.Responses;
 
 namespace Vtex.Toolbelt.Services
 {
@@ -36,6 +38,20 @@ namespace Vtex.Toolbelt.Services
             SendChanges(path, payload, resync);
         }
 
+        public void CreateWorkspace(string accountName, string workspace)
+        {
+            var payload = new CreateWorkspaceRequest(workspace);
+            var path = string.Format("accounts/{0}/workspaces", accountName);
+            var response = Post(path, payload);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = response.Content.ReadAsAsync<ErrorResponse>().Result;
+                throw new ApiException(string.Format("{0}: {1}", response.StatusCode.ToString(), error.Message),
+                    response);
+            }
+        }
+
         private ChangeBatchRequest GetPayloadFor(IEnumerable<Change> changes, string message = null)
         {
             var payload = new ChangeBatchRequest
@@ -54,13 +70,19 @@ namespace Vtex.Toolbelt.Services
                 path += "?resync=true";
             }
 
-            var response = _httpClient.PostAsync(path, payload, new JsonMediaTypeFormatter()).Result;
+            var response = Post(path, payload);
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ApiException(string.Format("Failed to send changes with status code {0} ({1})",
-                    (int) response.StatusCode, response.StatusCode), response);
+                var error = response.Content.ReadAsAsync<ErrorResponse>().Result;
+                throw new ApiException(string.Format("{0}: {1}", response.StatusCode.ToString(), error.Message),
+                    response);
             }
+        }
+
+        private HttpResponseMessage Post<T>(string path, T payload)
+        {
+            return _httpClient.PostAsync(path, payload, new JsonMediaTypeFormatter()).Result;
         }
     }
 }
