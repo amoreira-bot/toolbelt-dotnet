@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Vtex.Toolbelt.Model;
+using Vtex.Toolbelt.Services.Responses;
 
 namespace Vtex.Toolbelt.Services
 {
@@ -7,21 +9,44 @@ namespace Vtex.Toolbelt.Services
     {
         private readonly string _accountName;
         private readonly string _workspace;
+        private readonly IFileSystem _fileSystem;
         private readonly GalleryClient _galleryClient;
 
-        public AccountWatcher(string accountName, string workspace, string rootPath, string authenticationToken,
+        public AccountWatcher(string accountName, string workspace, IFileSystem fileSystem, string authenticationToken,
             Configuration configuration)
-            : base(rootPath, configuration)
+            : base(fileSystem.CurrentDirectory, configuration)
         {
             _accountName = accountName;
             _workspace = workspace;
-            _galleryClient = new GalleryClient(rootPath, authenticationToken, configuration.GalleryEndpoint);
+            _fileSystem = fileSystem;
+            _galleryClient = new GalleryClient(fileSystem.CurrentDirectory, authenticationToken,
+                configuration.GalleryEndpoint);
         }
 
         protected override void SendChanges(IList<Change> changes, bool resync)
         {
             _galleryClient.SendWorkspaceChanges(_accountName, _workspace, changes, resync);
             base.SendChanges(changes, resync);
+        }
+
+        public IEnumerable<FileConflict> IdentifyConflicts()
+        {
+            var remoteState = _galleryClient.GetWorkspaceState(_accountName, _workspace);
+            foreach (var local in _fileSystem.GetFileStates())
+            {
+                FileStateResponse remote = null;
+                if (remoteState.TryGetValue(local.Path, out remote))
+                    remoteState.Remove(local.Path);
+
+                if (remote == null)
+                    yield return new FileConflict(local.Path, local.Size, null);
+
+                else if (remote.Hash != local.Hash)
+                    yield return new FileConflict(local.Path, local.Size, remote.Size);
+            }
+
+            foreach (var remote in remoteState)
+                yield return new FileConflict(remote.Key, null, remote.Value.Size);
         }
     }
 }

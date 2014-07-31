@@ -13,8 +13,7 @@
 
         public AccountWatcher CreateAccountWatcher(string accountName, string workspace, string authenticationToken)
         {
-            return new AccountWatcher(accountName, workspace, _fileSystem.CurrentDirectory, authenticationToken,
-                _configuration);
+            return new AccountWatcher(accountName, workspace, _fileSystem, authenticationToken, _configuration);
         }
 
         public AppWatcher CreateAppWatcher(string appName, string authenticationToken)
