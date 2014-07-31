@@ -3,24 +3,21 @@ using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
 {
-    public class AccountWatcher : Watcher
+    public class AppWatcher : Watcher
     {
-        private readonly string _accountName;
-        private readonly string _workspace;
+        private readonly string _appName;
         private readonly GalleryClient _galleryClient;
 
-        public AccountWatcher(string accountName, string workspace, string rootPath, string authenticationToken,
-            Configuration configuration)
+        public AppWatcher(string appName, string rootPath, string authenticationToken, Configuration configuration)
             : base(rootPath, configuration)
         {
-            _accountName = accountName;
-            _workspace = workspace;
+            _appName = appName;
             _galleryClient = new GalleryClient(rootPath, authenticationToken, configuration.GalleryEndpoint);
         }
 
         protected override void SendChanges(IList<Change> changes, bool resync)
         {
-            _galleryClient.SendWorkspaceChanges(_accountName, _workspace, changes, resync);
+            _galleryClient.SendSandboxChanges(_appName, changes, resync);
             base.SendChanges(changes, resync);
         }
     }
