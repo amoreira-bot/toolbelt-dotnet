@@ -126,6 +126,7 @@
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\Requests\CreateWorkspaceRequest.cs" />
     <Compile Include="Services\Responses\ErrorResponse.cs" />
+    <Compile Include="Services\Responses\FileStateResponse.cs" />
     <Compile Include="Services\Watcher.cs" />
     <Compile Include="Services\WatcherFactory.cs">
       <SubType>Code</SubType>
