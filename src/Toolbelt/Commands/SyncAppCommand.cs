@@ -24,5 +24,12 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine("Using app [#magenta {0}]", appName);
             base.NotifyStart(appName);
         }
+
+        protected override void BeforeSync(Watcher watcher)
+        {
+            Console.WriteLine("Uploading current state...");
+            watcher.Resync();
+            Console.WriteLine("Done!");
+        }
     }
 }

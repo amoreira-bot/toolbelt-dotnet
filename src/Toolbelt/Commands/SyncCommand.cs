@@ -30,9 +30,7 @@ namespace Vtex.Toolbelt.Commands
             NotifyStart(package.Name);
 
             Console.WriteLine();
-            Console.WriteLine("Uploading current state...");
-            watcher.Resync();
-            Console.WriteLine("Done!");
+            BeforeSync(watcher);
 
             Console.WriteLine();
             Console.WriteLine("Waiting for changes...");
@@ -47,6 +45,8 @@ namespace Vtex.Toolbelt.Commands
         {
             Console.WriteLine("Starting sync...");
         }
+
+        protected abstract void BeforeSync(Watcher watcher);
 
         private void ChangesSent(IEnumerable<Change> changes, bool resync)
         {

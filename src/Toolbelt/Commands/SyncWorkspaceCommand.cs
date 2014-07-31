@@ -27,5 +27,12 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine("Using [#magenta {0}] of [#magenta {1}]", _workspace, accountName);
             base.NotifyStart(accountName);
         }
+
+        protected override void BeforeSync(Watcher watcher)
+        {
+            Console.WriteLine("Uploading current state...");
+            watcher.Resync();
+            Console.WriteLine("Done!");
+        }
     }
 }
