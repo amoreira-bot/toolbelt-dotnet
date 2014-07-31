@@ -48,14 +48,18 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine("Starting sync...");
         }
 
-        private void ChangesSent(IEnumerable<Change> changes)
+        private void ChangesSent(IEnumerable<Change> changes, bool resync)
         {
             foreach (var change in changes)
             {
                 Console.WriteLine("[#{0} {1}] {2}", change.Action == ChangeAction.Update ? "cyan" : "red",
                     change.Action.ToString().ToUpper(), change.Path);
             }
-            Console.WriteLine("Waiting for changes...");
+
+            if (!resync)
+            {
+                Console.WriteLine("Waiting for changes...");
+            }
         }
     }
 }

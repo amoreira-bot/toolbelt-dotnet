@@ -44,11 +44,11 @@ namespace Vtex.Toolbelt.Services
             SendChanges(summarizedChanges.ToArray(), true);
         }
 
-        public event Action<IList<Change>> ChangesSent;
+        public event Action<IList<Change>, bool> ChangesSent;
 
         protected virtual void SendChanges(IList<Change> changes, bool resync)
         {
-            ChangesSent(changes);
+            ChangesSent(changes, resync);
         }
 
         private FileSystemWatcher CreateFileSystemWatcher()
