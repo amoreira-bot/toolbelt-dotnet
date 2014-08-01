@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Vtex.Toolbelt.Model
 {
@@ -21,6 +22,8 @@ namespace Vtex.Toolbelt.Model
             var updatedPaths = new List<string>();
             foreach (var change in changes)
             {
+                if (ShouldIgnore(change.Path)) continue;
+
                 switch (change.Action)
                 {
                     case ChangeAction.Update:
@@ -36,6 +39,24 @@ namespace Vtex.Toolbelt.Model
             }
             return updatedPaths.Select(path => new Change(ChangeAction.Update, NormalizePath(path, rootPath)))
                 .Union(deletedPaths.Select(path => new Change(ChangeAction.Delete, NormalizePath(path, rootPath))));
+        }
+
+        private static bool ShouldIgnore(string path)
+        {
+            if (Regex.IsMatch(path, @"(\.tmp|~)$", RegexOptions.IgnoreCase))
+            {
+                return true;
+            }
+
+            var fragments = Regex.Split(path, @"\\|/");
+
+            int number;
+            if (int.TryParse(fragments.Last(), out number))
+            {
+                return number >= 4913 && (number - 4913) % 123 == 0;
+            }
+
+            return fragments.Any(f => f.StartsWith("."));
         }
 
         private static bool ShouldUpdate(string changePath, ICollection<string> updatedPaths,

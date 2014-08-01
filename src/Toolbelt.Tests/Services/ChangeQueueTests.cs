@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Vtex.Toolbelt.Model;
-using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Tests.Services
 {
@@ -169,6 +168,37 @@ namespace Vtex.Toolbelt.Tests.Services
                 {
                     new Change(ChangeAction.Delete, "models"),
                     new Change(ChangeAction.Update, "models\\product.json")
+                }));
+            }
+
+            [Test]
+            public void Should_filter_ignored_files()
+            {
+                // Arrange
+                var changes = new[]
+                {
+                    new Change(ChangeAction.Update, "should-not-be-ignored.txt"),
+                    new Change(ChangeAction.Delete, "4790"),
+                    new Change(ChangeAction.Update, ".gitignore"),
+                    new Change(ChangeAction.Update, "inner\\.gitignore"),
+                    new Change(ChangeAction.Update, "inner\\.git\\config"),
+                    new Change(ChangeAction.Delete, "some-file.txt.tmp"),
+                    new Change(ChangeAction.Delete, "some-file.txt.1234.TMP"),
+                    new Change(ChangeAction.Delete, "some-file.txt~"),
+                    new Change(ChangeAction.Delete, "4913"),
+                    new Change(ChangeAction.Delete, "5036"),
+                    new Change(ChangeAction.Delete, "inner\\4913"),
+                };
+                var queue = new TestableChangeQueue(changes);
+
+                // Act
+                var result = queue.Summarize("");
+
+                // Assert
+                Assert.That(result, Is.EquivalentTo(new[]
+                {
+                    new Change(ChangeAction.Update, "should-not-be-ignored.txt"),
+                    new Change(ChangeAction.Delete, "4790"),
                 }));
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vtex.Toolbelt.CommandFramework;
 using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services;
@@ -48,7 +49,7 @@ namespace Vtex.Toolbelt.Commands
             Console.WriteLine("Starting sync...");
         }
 
-        private void ChangesSent(IEnumerable<Change> changes, bool resync)
+        private void ChangesSent(IList<Change> changes, bool resync)
         {
             foreach (var change in changes)
             {
@@ -56,7 +57,7 @@ namespace Vtex.Toolbelt.Commands
                     change.Action.ToString().ToUpper(), change.Path);
             }
 
-            if (!resync)
+            if (!resync && changes.Any())
             {
                 Console.WriteLine("Waiting for changes...");
             }
