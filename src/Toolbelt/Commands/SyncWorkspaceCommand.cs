@@ -54,14 +54,16 @@ namespace Vtex.Toolbelt.Commands
             {
                 case 'D':
                     Console.WriteLine();
-                    Console.WriteLine("Fetching remote changes");
+                    Console.Write("Fetching remote changes...");
                     accountWatcher.ResolveWithRemote(conflicts);
+                    Console.WriteLine(" done!");
                     break;
 
                 case 'U':
                     Console.WriteLine();
-                    Console.WriteLine("Sending local changes");
+                    Console.Write("Sending local changes...");
                     accountWatcher.ResolveWithLocal(conflicts);
+                    Console.WriteLine(" done!");
                     break;
 
                 default:
@@ -69,7 +71,7 @@ namespace Vtex.Toolbelt.Commands
             }
         }
 
-        private void WriteConflictsTable(IEnumerable<FileConflict> conflicts)
+        private void WriteConflictsTable(ICollection<FileConflict> conflicts)
         {
             const int max = 15;
             var table = conflicts.Take(max).OrderBy(conflict => conflict.Path)
@@ -92,6 +94,9 @@ namespace Vtex.Toolbelt.Commands
                 Console.WriteLine("| {0} | {1} | {2} |", conflict.Item1.PadRight(widths[0]),
                     conflict.Item2.PadRight(widths[1]), conflict.Item3.PadRight(widths[2]));
             }
+
+            if(conflicts.Count > max)
+                Console.WriteLine("And {0} more", conflicts.Count - max);
         }
     }
 }

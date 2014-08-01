@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services.Responses;
 
@@ -50,6 +52,18 @@ namespace Vtex.Toolbelt.Services
 
         public void ResolveWithRemote(ICollection<FileConflict> conflicts)
         {
+            foreach (var conflict in conflicts)
+            {
+                if (conflict.RemoteSize == null)
+                {
+                    _fileSystem.DeleteFile(conflict.Path);
+                }
+                else
+                {
+                    var file = _galleryClient.GetFile(_accountName, _workspace, conflict.Path);
+                    _fileSystem.WriteFile(conflict.Path, file);
+                }
+            }
         }
 
         public void ResolveWithLocal(ICollection<FileConflict> conflicts)

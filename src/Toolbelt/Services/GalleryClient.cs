@@ -66,6 +66,20 @@ namespace Vtex.Toolbelt.Services
             return response.Content.ReadAsAsync<Dictionary<string, FileStateResponse>>().Result;
         }
 
+        public byte[] GetFile(string accountName, string workspace, string filePath)
+        {
+            var requestPath = string.Format("accounts/{0}/workspaces/{1}/files/{2}", accountName, workspace, filePath);
+            var response = _httpClient.GetAsync(requestPath).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = response.Content.ReadAsAsync<ErrorResponse>().Result;
+                throw new ApiException(string.Format("{0}: {1}", response.StatusCode, error.Message), response);
+            }
+
+            return response.Content.ReadAsByteArrayAsync().Result;
+        }
+
         private ChangeBatchRequest GetPayloadFor(IEnumerable<Change> changes, string message = null)
         {
             var payload = new ChangeBatchRequest

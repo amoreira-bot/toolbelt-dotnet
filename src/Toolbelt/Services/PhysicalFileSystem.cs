@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
@@ -29,6 +30,21 @@ namespace Vtex.Toolbelt.Services
         {
             return Directory.EnumerateFiles(_root, "*", SearchOption.AllDirectories)
                 .Select(GetFileState);
+        }
+
+        public void DeleteFile(string path)
+        {
+            File.Delete(Path.Combine(_root, path));
+        }
+
+        public void WriteFile(string path, byte[] file)
+        {
+            var fullPath = Path.Combine(_root, path);
+            var directory = Path.GetDirectoryName(fullPath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
+            File.WriteAllBytes(fullPath, file);
         }
 
         private FileState GetFileState(string path)
@@ -58,7 +74,7 @@ namespace Vtex.Toolbelt.Services
 
         private static byte[] NormalizeLineEndings(string text)
         {
-            text = text.Replace("\\r\\n", "\\n");
+            text = text.Replace("\r\n", "\\n");
             return Encoding.UTF8.GetBytes(text);
         }
 

@@ -10,5 +10,9 @@ namespace Vtex.Toolbelt.Services
         string ReadTextFile(string relativePath);
 
         IEnumerable<FileState> GetFileStates();
+
+        void DeleteFile(string path);
+
+        void WriteFile(string path, byte[] file);
     }
 }
