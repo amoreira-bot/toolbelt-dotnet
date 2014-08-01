@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using Vtex.Toolbelt.Model;
+using Newtonsoft.Json;
 
 namespace Vtex.Toolbelt.Services
 {
@@ -60,6 +61,26 @@ namespace Vtex.Toolbelt.Services
             {
                 throw new ApiException(string.Format("Failed to send changes with status code {0} ({1})",
                     (int) response.StatusCode, response.StatusCode), response);
+            }
+        }
+
+        public void PushApp(string name, string version, byte[] files)
+        {
+            var requestContent = new MultipartFormDataContent();
+            var zipContent = new ByteArrayContent(files);
+
+            var fileName = string.Format("{0}-{1}", name, version);
+
+            zipContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/zip");
+            requestContent.Add(zipContent, fileName, fileName + ".zip");
+
+            var response = _httpClient.PostAsync("apps", requestContent).Result;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                dynamic body = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+                throw new ApiException(string.Format("Failed to publish app with status code {0} ({1})",
+                    (int) response.StatusCode, body.Message), response);
             }
         }
     }

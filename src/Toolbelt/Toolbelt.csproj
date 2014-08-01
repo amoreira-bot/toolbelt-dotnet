@@ -64,6 +64,7 @@
     <Compile Include="..\ProductAssemblyInfo.cs">
       <Link>Properties\ProductAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppPublisher.cs" />
     <Compile Include="CommandFramework\AliasAttribute.cs" />
     <Compile Include="CommandFramework\AliasCommandMatcher.cs" />
     <Compile Include="CommandFramework\Command.cs">
@@ -82,6 +83,7 @@
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\SyncAppCommand.cs" />
     <Compile Include="Commands\SyncCommand.cs" />
+    <Compile Include="Commands\PushAppCommand.cs" />
     <Compile Include="Commands\SyncWorkspaceCommand.cs">
       <SubType>Code</SubType>
     </Compile>
