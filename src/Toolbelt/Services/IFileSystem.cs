@@ -11,6 +11,14 @@ namespace Vtex.Toolbelt.Services
 
         IEnumerable<FileState> GetFileStates();
 
+        string GetRelativePath(string path);
+
+        bool IsBinary(string path);
+
+        byte[] ReadBytes(string path);
+
+        string ReadNormalizedText(string path);
+
         void DeleteFile(string path);
 
         void WriteFile(string path, byte[] file);

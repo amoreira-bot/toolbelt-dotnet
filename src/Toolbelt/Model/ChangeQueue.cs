@@ -1,41 +1,70 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Model
 {
-    public class ChangeQueue : Queue<Change>
+    public class ChangeQueue
     {
-        public ChangeQueue()
+        private readonly Queue<Change> _queue = new Queue<Change>(); 
+        private readonly IFileSystem _fileSystem;
+
+        public ChangeQueue(IFileSystem fileSystem)
         {
+            _fileSystem = fileSystem;
         }
 
-        public ChangeQueue(IEnumerable<Change> changes) : base(changes)
+        public ChangeQueue(IEnumerable<Change> changes, IFileSystem fileSystem)
+            : this(fileSystem)
         {
+            _queue = new Queue<Change>(changes);
         }
 
-        public IEnumerable<Change> Summarize(string rootPath)
+        public void Enqueue(Change change)
         {
-            var changes = this.Reverse();
-            var deletedPaths = new List<string>();
-            var updatedPaths = new List<string>();
-            foreach (var change in changes)
+            lock(_queue)
+                _queue.Enqueue(change);
+        }
+
+        public Change Dequeue(Change change)
+        {
+            lock (_queue)
+                return _queue.Dequeue();
+        }
+
+        public IEnumerable<FinalizedChange> Summarize()
+        {
+            lock (_queue)
             {
-                switch (change.Action)
-                {
-                    case ChangeAction.Update:
-                        if (ShouldUpdate(change.Path, updatedPaths, deletedPaths))
-                            updatedPaths.Add(change.Path);
-                        break;
+                var changes = _queue.Reverse();
 
-                    case ChangeAction.Delete:
-                        if (ShouldDelete(change.Path, updatedPaths, deletedPaths))
-                            deletedPaths.Add(change.Path);
-                        break;
+                var deletedPaths = new List<string>();
+                var updatedPaths = new List<string>();
+
+                foreach (var change in changes)
+                {
+                    switch (change.Action)
+                    {
+                        case ChangeAction.Update:
+                            if (ShouldUpdate(change.Path, updatedPaths, deletedPaths))
+                                updatedPaths.Add(change.Path);
+                            break;
+
+                        case ChangeAction.Delete:
+                            if (ShouldDelete(change.Path, updatedPaths, deletedPaths))
+                                deletedPaths.Add(change.Path);
+                            break;
+                    }
                 }
+                _queue.Clear();
+                return updatedPaths.Select(FinalizeUpdate).Union(deletedPaths.Select(FinalizeDeletion));
             }
-            return updatedPaths.Select(path => new Change(ChangeAction.Update, NormalizePath(path, rootPath)))
-                .Union(deletedPaths.Select(path => new Change(ChangeAction.Delete, NormalizePath(path, rootPath))));
+        }
+
+        public Change[] ToArray()
+        {
+            return _queue.ToArray();
         }
 
         private static bool ShouldUpdate(string changePath, ICollection<string> updatedPaths,
@@ -53,9 +82,18 @@ namespace Vtex.Toolbelt.Model
                    && !deletedPaths.Contains(changePath);
         }
 
-        protected virtual string NormalizePath(string path, string rootPath)
+        protected virtual FinalizedChange FinalizeUpdate(string fullPath)
         {
-            return path.Substring(rootPath.Length + 1).Replace('\\', '/');
+            var path = _fileSystem.GetRelativePath(fullPath);
+            return _fileSystem.IsBinary(path)
+                ? FinalizedChange.ForUpdate(path, _fileSystem.ReadBytes(path))
+                : FinalizedChange.ForUpdate(path, _fileSystem.ReadNormalizedText(path));
+        }
+
+        protected virtual FinalizedChange FinalizeDeletion(string fullPath)
+        {
+            var path = _fileSystem.GetRelativePath(fullPath);
+            return FinalizedChange.ForDeletion(path);
         }
     }
 }

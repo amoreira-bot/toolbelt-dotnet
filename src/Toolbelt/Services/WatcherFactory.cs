@@ -18,7 +18,7 @@
 
         public AppWatcher CreateAppWatcher(string appName, string authenticationToken)
         {
-            return new AppWatcher(appName, _fileSystem.CurrentDirectory, authenticationToken, _configuration);
+            return new AppWatcher(appName, _fileSystem, authenticationToken, _configuration);
         }
     }
 }

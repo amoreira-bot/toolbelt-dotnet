@@ -48,7 +48,7 @@ namespace Vtex.Toolbelt.Tests.Services
             base.DeletePath(path);
         }
 
-        protected override void SendChanges(IList<Change> changes, bool resync)
+        protected override void SendChanges(IList<FinalizedChange> changes, bool resync)
         {
             throw new System.NotImplementedException();
         }

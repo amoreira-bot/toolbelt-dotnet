@@ -8,14 +8,15 @@ namespace Vtex.Toolbelt.Services
         private readonly string _appName;
         private readonly GalleryClient _galleryClient;
 
-        public AppWatcher(string appName, string rootPath, string authenticationToken, Configuration configuration)
-            : base(rootPath, configuration)
+        public AppWatcher(string appName, IFileSystem fileSystem, string authenticationToken,
+            Configuration configuration)
+            : base(fileSystem, configuration)
         {
             _appName = appName;
-            _galleryClient = new GalleryClient(rootPath, authenticationToken, configuration.GalleryEndpoint);
+            _galleryClient = new GalleryClient(authenticationToken, configuration.GalleryEndpoint);
         }
 
-        protected override void SendChanges(IList<Change> changes, bool resync)
+        protected override void SendChanges(IList<FinalizedChange> changes, bool resync)
         {
             _galleryClient.SendSandboxChanges(_appName, changes, resync);
             base.SendChanges(changes, resync);

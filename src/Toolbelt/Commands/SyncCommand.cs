@@ -48,7 +48,7 @@ namespace Vtex.Toolbelt.Commands
 
         protected abstract void BeforeSync(Watcher watcher);
 
-        private void ChangesSent(IEnumerable<Change> changes, bool resync)
+        private void ChangesSent(IEnumerable<FinalizedChange> changes, bool resync)
         {
             foreach (var change in changes)
             {

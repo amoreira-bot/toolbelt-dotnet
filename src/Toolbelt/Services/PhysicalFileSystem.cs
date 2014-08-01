@@ -14,6 +14,7 @@ namespace Vtex.Toolbelt.Services
         private readonly string _root = Environment.CurrentDirectory;
         private static readonly HashAlgorithm HashAlgorithm = MD5.Create();
         private static readonly string[] BinaryExtensions = {"gz", "pdf", "woff", "zip", "gif", "jpeg", "jpg", "png"};
+        private static readonly Encoding Encoding = Encoding.UTF8;
 
         public string CurrentDirectory
         {
@@ -23,13 +24,35 @@ namespace Vtex.Toolbelt.Services
         public string ReadTextFile(string relativePath)
         {
             var filePath = Path.Combine(_root, relativePath);
-            return File.ReadAllText(filePath, Encoding.UTF8);
+            return File.ReadAllText(filePath, Encoding);
         }
 
         public IEnumerable<FileState> GetFileStates()
         {
             return Directory.EnumerateFiles(_root, "*", SearchOption.AllDirectories)
                 .Select(GetFileState);
+        }
+
+        public string GetRelativePath(string fullPath)
+        {
+            return fullPath.Substring(_root.Length + 1).Replace('\\', '/');
+        }
+
+        public bool IsBinary(string path)
+        {
+            return BinaryExtensions.Any(extension =>
+                path.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public byte[] ReadBytes(string path)
+        {
+            return File.ReadAllBytes(Path.Combine(_root, path));
+        }
+
+        public string ReadNormalizedText(string path)
+        {
+            var text = File.ReadAllText(Path.Combine(_root, path));
+            return text.Replace("\r\n", "\\n");
         }
 
         public void DeleteFile(string path)
@@ -49,9 +72,7 @@ namespace Vtex.Toolbelt.Services
 
         private FileState GetFileState(string path)
         {
-            var content = IsBinary(path)
-                ? File.ReadAllBytes(path)
-                : NormalizeLineEndings(File.ReadAllText(path, Encoding.UTF8));
+            var content = IsBinary(path) ? ReadBytes(path) : Encoding.GetBytes(ReadNormalizedText(path));
 
             return new FileState
             {
@@ -64,18 +85,6 @@ namespace Vtex.Toolbelt.Services
         private static string ComputeHash(byte[] content)
         {
             return HashAlgorithm.ComputeHash(content).Aggregate("", (acc, current) => acc + current.ToString("x2"));
-        }
-
-        private static bool IsBinary(string path)
-        {
-            return BinaryExtensions.Any(extension =>
-                path.EndsWith("." + extension, StringComparison.OrdinalIgnoreCase));
-        }
-
-        private static byte[] NormalizeLineEndings(string text)
-        {
-            text = text.Replace("\r\n", "\\n");
-            return Encoding.UTF8.GetBytes(text);
         }
 
         private string NormalizePath(string path)

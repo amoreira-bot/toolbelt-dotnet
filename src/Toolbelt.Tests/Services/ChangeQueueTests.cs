@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Vtex.Toolbelt.Model;
-using Vtex.Toolbelt.Services;
 
 namespace Vtex.Toolbelt.Tests.Services
 {
@@ -22,10 +21,13 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
-                Assert.That(result, Is.EquivalentTo(changes));
+                Assert.That(result, Is.EquivalentTo(new[]
+                {
+                    new FinalizedChange(ChangeAction.Update, "a")
+                }));
             }
 
             [Test]
@@ -40,12 +42,12 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Update, "a")
+                    new FinalizedChange(ChangeAction.Update, "a")
                 }));
             }
 
@@ -60,10 +62,13 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
-                Assert.That(result, Is.EquivalentTo(changes));
+                Assert.That(result, Is.EquivalentTo(new[]
+                {
+                    new FinalizedChange(ChangeAction.Delete, "a")
+                }));
             }
 
             [Test]
@@ -78,12 +83,12 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Delete, "a")
+                    new FinalizedChange(ChangeAction.Delete, "a")
                 }));
             }
 
@@ -99,12 +104,12 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Delete, "a")
+                    new FinalizedChange(ChangeAction.Delete, "a")
                 }));
             }
 
@@ -120,12 +125,12 @@ namespace Vtex.Toolbelt.Tests.Services
                 var queue = new TestableChangeQueue(changes);
 
                 // Act
-                var result = queue.Summarize("");
+                var result = queue.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Update, "a")
+                    new FinalizedChange(ChangeAction.Update, "a")
                 }));
             }
 
@@ -141,12 +146,12 @@ namespace Vtex.Toolbelt.Tests.Services
                 var client = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.Summarize("");
+                var result = client.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Delete, "models")
+                    new FinalizedChange(ChangeAction.Delete, "models")
                 }));
             }
 
@@ -162,13 +167,13 @@ namespace Vtex.Toolbelt.Tests.Services
                 var client = new TestableChangeQueue(changes);
 
                 // Act
-                var result = client.Summarize("");
+                var result = client.Summarize();
 
                 // Assert
                 Assert.That(result.ToArray(), Is.EquivalentTo(new[]
                 {
-                    new Change(ChangeAction.Delete, "models"),
-                    new Change(ChangeAction.Update, "models\\product.json")
+                    new FinalizedChange(ChangeAction.Delete, "models"),
+                    new FinalizedChange(ChangeAction.Update, "models\\product.json")
                 }));
             }
         }
@@ -176,15 +181,20 @@ namespace Vtex.Toolbelt.Tests.Services
 
     public class TestableChangeQueue : ChangeQueue
     {
-        public TestableChangeQueue(IEnumerable<Change> changes)
+        public TestableChangeQueue(IEnumerable<Change> changes) : base(null)
         {
             foreach (var change in changes)
                 Enqueue(change);
         }
 
-        protected override string NormalizePath(string path, string rootPath)
+        protected override FinalizedChange FinalizeUpdate(string fullPath)
         {
-            return path;
+            return FinalizedChange.ForUpdate(fullPath, "");
+        }
+
+        protected override FinalizedChange FinalizeDeletion(string fullPath)
+        {
+            return FinalizedChange.ForDeletion(fullPath);
         }
     }
 }

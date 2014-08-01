@@ -12,26 +12,24 @@ namespace Vtex.Toolbelt.Services
 {
     public class GalleryClient
     {
-        private readonly string _rootPath;
         private readonly HttpClient _httpClient;
 
-        public GalleryClient(string rootPath, string authenticationToken, string endpointUrl)
+        public GalleryClient(string authenticationToken, string endpointUrl)
         {
-            _rootPath = rootPath;
-
             _httpClient = new HttpClient {BaseAddress = new Uri(endpointUrl)};
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("token", authenticationToken);
         }
 
-        public void SendWorkspaceChanges(string accountName, string workspace, IEnumerable<Change> changes, bool resync)
+        public void SendWorkspaceChanges(string accountName, string workspace, IEnumerable<FinalizedChange> changes,
+            bool resync)
         {
             var payload = GetPayloadFor(changes, "File changes via VTEX Toolbelt");
             var path = string.Format("accounts/{0}/workspaces/{1}/changes", accountName, workspace);
             SendChanges(path, payload, resync);
         }
 
-        public void SendSandboxChanges(string appName, IEnumerable<Change> changes, bool resync)
+        public void SendSandboxChanges(string appName, IEnumerable<FinalizedChange> changes, bool resync)
         {
             var payload = GetPayloadFor(changes);
             var path = string.Format("sandbox/{0}/changes", appName);
@@ -80,11 +78,11 @@ namespace Vtex.Toolbelt.Services
             return response.Content.ReadAsByteArrayAsync().Result;
         }
 
-        private ChangeBatchRequest GetPayloadFor(IEnumerable<Change> changes, string message = null)
+        private static ChangeBatchRequest GetPayloadFor(IEnumerable<FinalizedChange> changes, string message = null)
         {
             var payload = new ChangeBatchRequest
             {
-                Changes = changes.Select(change => ChangeRequest.FromChange(change, _rootPath)).ToArray(),
+                Changes = changes.Select(ChangeRequest.FromChange).ToArray(),
                 Message = message,
             };
 

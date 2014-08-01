@@ -45,7 +45,7 @@ namespace Vtex.Toolbelt.Commands
             }
 
             var credential = _login.GetValidCredential();
-            var client = new GalleryClient("", credential.Token, _configuration.GalleryEndpoint);
+            var client = new GalleryClient(credential.Token, _configuration.GalleryEndpoint);
             client.CreateWorkspace(_account, _workspace);
 
             Console.WriteLine("Workspace '{0}' created for account '{1}'", _workspace, _account);

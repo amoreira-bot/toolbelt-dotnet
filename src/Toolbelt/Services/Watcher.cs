@@ -9,16 +9,17 @@ namespace Vtex.Toolbelt.Services
 {
     public abstract class Watcher
     {
-        private readonly string _rootPath;
+        private readonly IFileSystem _fileSystem;
         private readonly Debouncer _debouncer;
         private FileSystemWatcher _fileSystemWatcher;
 
-        protected readonly ChangeQueue Changes = new ChangeQueue();
+        protected readonly ChangeQueue Changes;
 
-        protected Watcher(string rootPath, Configuration configuration)
+        protected Watcher(IFileSystem fileSystem, Configuration configuration)
         {
-            _rootPath = rootPath;
+            _fileSystem = fileSystem;
             _debouncer = new Debouncer(TimeSpan.FromMilliseconds(configuration.FileSystemDelay));
+            Changes = new ChangeQueue(fileSystem);
         }
 
         public void Start()
@@ -37,23 +38,24 @@ namespace Vtex.Toolbelt.Services
 
         public void Resync()
         {
-            var changes = this.ListFilesInFolder(_rootPath).Select(path => new Change(ChangeAction.Update, path));
-            var changeQueue = new ChangeQueue(changes);
-            var summarizedChanges = changeQueue.Summarize(_rootPath);
+            var changes = this.ListFilesInFolder(_fileSystem.CurrentDirectory)
+                .Select(path => new Change(ChangeAction.Update, path));
+            var changeQueue = new ChangeQueue(changes, _fileSystem);
+            var summarizedChanges = changeQueue.Summarize();
 
             SendChanges(summarizedChanges.ToArray(), true);
         }
 
-        public event Action<IList<Change>, bool> ChangesSent;
+        public event Action<IList<FinalizedChange>, bool> ChangesSent;
 
-        protected virtual void SendChanges(IList<Change> changes, bool resync)
+        protected virtual void SendChanges(IList<FinalizedChange> changes, bool resync)
         {
             ChangesSent(changes, resync);
         }
 
         private FileSystemWatcher CreateFileSystemWatcher()
         {
-            var watcher = new FileSystemWatcher(_rootPath)
+            var watcher = new FileSystemWatcher(_fileSystem.CurrentDirectory)
             {
                 IncludeSubdirectories = true,
                 NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite |
@@ -115,8 +117,7 @@ namespace Vtex.Toolbelt.Services
         {
             _debouncer.Debounce(() =>
             {
-                var changes = this.Changes.Summarize(_rootPath);
-                this.Changes.Clear();
+                var changes = this.Changes.Summarize();
                 SendChanges(changes.ToArray(), false);
             });
         }

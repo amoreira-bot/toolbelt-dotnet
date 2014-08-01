@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services.Responses;
 
@@ -15,16 +13,15 @@ namespace Vtex.Toolbelt.Services
 
         public AccountWatcher(string accountName, string workspace, IFileSystem fileSystem, string authenticationToken,
             Configuration configuration)
-            : base(fileSystem.CurrentDirectory, configuration)
+            : base(fileSystem, configuration)
         {
             _accountName = accountName;
             _workspace = workspace;
             _fileSystem = fileSystem;
-            _galleryClient = new GalleryClient(fileSystem.CurrentDirectory, authenticationToken,
-                configuration.GalleryEndpoint);
+            _galleryClient = new GalleryClient(authenticationToken, configuration.GalleryEndpoint);
         }
 
-        protected override void SendChanges(IList<Change> changes, bool resync)
+        protected override void SendChanges(IList<FinalizedChange> changes, bool resync)
         {
             _galleryClient.SendWorkspaceChanges(_accountName, _workspace, changes, resync);
             base.SendChanges(changes, resync);

@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using Vtex.Toolbelt.Model;
 
 namespace Vtex.Toolbelt.Services
@@ -11,37 +9,15 @@ namespace Vtex.Toolbelt.Services
         public string Content { get; set; }
         public string Encoding { get; set; }
 
-        public static ChangeRequest FromChange(Change change, string rootPath)
-        {
-            return change.Action == ChangeAction.Update
-                ? ForUpdate(change.Path, rootPath)
-                : ForDeletion(change.Path);
-        }
-
-        private static ChangeRequest ForUpdate(string path, string rootPath)
+        public static ChangeRequest FromChange(FinalizedChange change)
         {
             return new ChangeRequest
             {
-                Action = "update",
-                Path = path,
-                Encoding = "base64",
-                Content = ReadFileAsBase64(System.IO.Path.Combine(rootPath, path))
+                Action = change.Action.ToString().ToLower(),
+                Path = change.Path,
+                Encoding = change.Action == ChangeAction.Delete ? null : change.Encoding.ToString().ToLower(),
+                Content = change.Content
             };
-        }
-
-        private static ChangeRequest ForDeletion(string path)
-        {
-            return new ChangeRequest
-            {
-                Action = "delete",
-                Path = path
-            };
-        }
-
-        private static string ReadFileAsBase64(string path)
-        {
-            var bytes = File.ReadAllBytes(path);
-            return Convert.ToBase64String(bytes);
         }
     }
 }
