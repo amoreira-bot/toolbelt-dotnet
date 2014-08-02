@@ -52,7 +52,7 @@ namespace Vtex.Toolbelt.Services
         public string ReadNormalizedText(string path)
         {
             var text = File.ReadAllText(Path.Combine(_root, path));
-            return text.Replace("\r\n", "\\n");
+            return text.Replace("\r\n", "\n");
         }
 
         public void DeleteFile(string path)
