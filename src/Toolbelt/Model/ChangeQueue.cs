@@ -62,6 +62,35 @@ namespace Vtex.Toolbelt.Model
             }
         }
 
+        public IEnumerable<FinalizedChange> Finalize()
+        {
+            lock (_queue)
+            {
+                var changes = _queue.Reverse();
+
+                var deletedPaths = new List<string>();
+                var updatedPaths = new List<string>();
+
+                foreach (var change in changes)
+                {
+                    switch (change.Action)
+                    {
+                        case ChangeAction.Update:
+                            if (ShouldUpdate(change.Path, updatedPaths, deletedPaths))
+                                updatedPaths.Add(change.Path);
+                            break;
+
+                        case ChangeAction.Delete:
+                            if (ShouldDelete(change.Path, updatedPaths, deletedPaths))
+                                deletedPaths.Add(change.Path);
+                            break;
+                    }
+                }
+                _queue.Clear();
+                return updatedPaths.Select(FinalizeUpdate).Union(deletedPaths.Select(FinalizeDeletion));
+            }
+        } 
+
         public Change[] ToArray()
         {
             return _queue.ToArray();

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vtex.Toolbelt.Model;
 using Vtex.Toolbelt.Services.Responses;
 
@@ -65,6 +66,18 @@ namespace Vtex.Toolbelt.Services
 
         public void ResolveWithLocal(ICollection<FileConflict> conflicts)
         {
+            var changes = conflicts.Select(conflict => conflict.LocalSize == null
+                ? FinalizedChange.ForDeletion(conflict.Path)
+                : GetUpdateChange(conflict.Path));
+
+            SendChanges(changes.ToList(), false);
+        }
+
+        private FinalizedChange GetUpdateChange(string path)
+        {
+            return _fileSystem.IsBinary(path)
+                ? FinalizedChange.ForUpdate(path, _fileSystem.ReadBytes(path))
+                : FinalizedChange.ForUpdate(path, _fileSystem.ReadNormalizedText(path));
         }
     }
 }
