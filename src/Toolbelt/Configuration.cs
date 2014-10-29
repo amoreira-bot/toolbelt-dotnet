@@ -3,7 +3,7 @@
     public class Configuration
     {
         public const int DefaultFileSystemDelay = 300;
-        public const string DefaultGalleryEndpoint = "http://gallery.vtexcommercebeta.com.br/api/gallery/";
+        public const string DefaultGalleryEndpoint = "http://gallery.vtexcommercebeta.com.br/gallery/";
 
         public int FileSystemDelay { get; set; }
 

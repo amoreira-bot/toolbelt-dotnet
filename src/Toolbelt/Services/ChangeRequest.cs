@@ -22,7 +22,7 @@ namespace Vtex.Toolbelt.Services
         {
             return new ChangeRequest
             {
-                Action = "update",
+                Action = "save",
                 Path = path,
                 Encoding = "base64",
                 Content = ReadFileAsBase64(System.IO.Path.Combine(rootPath, path))
@@ -33,7 +33,7 @@ namespace Vtex.Toolbelt.Services
         {
             return new ChangeRequest
             {
-                Action = "delete",
+                Action = "remove",
                 Path = path
             };
         }

@@ -25,7 +25,7 @@ namespace Vtex.Toolbelt.Services
         public void SendWorkspaceChanges(string accountName, string workspace, IEnumerable<Change> changes, bool resync)
         {
             var payload = GetPayloadFor(changes, "File changes via VTEX Toolbelt");
-            var path = string.Format("accounts/{0}/{1}/changes", accountName, workspace);
+            var path = string.Format("accounts/{0}/workspaces/{1}/changes", accountName, workspace);
             SendChanges(path, payload, resync);
         }
 
