@@ -54,7 +54,9 @@ namespace Vtex.Toolbelt.Services
                 path += "?resync=true";
             }
 
-            var response = _httpClient.PostAsync(path, payload, new JsonMediaTypeFormatter()).Result;
+            var response = payload.Message != null ?
+                _httpClient.PostAsync(path, payload, new JsonMediaTypeFormatter()).Result :
+                _httpClient.PostAsync(path, payload.Changes, new JsonMediaTypeFormatter()).Result;
 
             if (!response.IsSuccessStatusCode)
             {
