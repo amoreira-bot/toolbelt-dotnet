@@ -36,9 +36,13 @@ before_build:
 
 deploy:
   - provider: Environment
+    name: s3
+
+  - provider: Environment
     name: chocolatey
     on:
       release_tag: true
 
 before_deploy:
   - ps: .\tools\appveyor\scripts\declare-release-tag.ps1
+  - ps: create-zip-file.ps1
