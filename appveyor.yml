@@ -36,10 +36,6 @@ before_build:
 
 deploy:
   - provider: Environment
-    name: s3
-    artifact: to-publish
-
-  - provider: Environment
     name: chocolatey
     on:
       release_tag: true
