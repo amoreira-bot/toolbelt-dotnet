@@ -11,10 +11,12 @@ $buildPath = '.\build'
 $artifactsPath = '.\artifacts'
 $releasePath = '.\src\Toolbelt\bin\Release'
 
+$functions = '.\appveyor\functions\Get-VersionFromGitTag.ps1"
+
 if ($env:APPVEYOR) {
     Push-Location $env:APPVEYOR_BUILD_FOLDER
 
-    $version = "1.2.3"
+    $version = Get-VersionFromGitTag
     if ($version) {
 
       EnsureEmptyFolder $buildPath
