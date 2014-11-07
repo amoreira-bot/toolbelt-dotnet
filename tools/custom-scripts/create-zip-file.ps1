@@ -11,10 +11,14 @@ $buildPath = '.\build'
 $artifactsPath = '.\artifacts'
 $releasePath = '.\src\Toolbelt\bin\Release'
 
+$here = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$functions = Join-Path (Split-Path -Parent $here) 'appveyor/functions'
+. "$functions\Get-VersionFromGitTag.ps1"
+
 if ($env:APPVEYOR) {
     Push-Location $env:APPVEYOR_BUILD_FOLDER
 
-    $version = "1.2.3"
+    $version = Get-VersionFromGitTag
     if ($version) {
 
       EnsureEmptyFolder $buildPath
@@ -25,15 +29,9 @@ if ($env:APPVEYOR) {
       $fileName = "vtex-toolbelt-$version.zip"
       $fullFilePath = [System.IO.Path]::GetFullPath((Join-Path (pwd) $artifactsPath\$fileName))
 
-      write-output "Estou gerando"
-
       $src = [System.IO.Path]::GetFullPath((Join-Path (pwd) $buildPath\))
       [void][Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')
       [System.IO.Compression.ZipFile]::CreateFromDirectory($src, $fullFilePath)
-
-      write-output $src
-      write-output $fullFilePath
-      write-output "Gerei"
 
       Push-AppveyorArtifact  $fullFilePath -DeploymentName to-publish
     }
